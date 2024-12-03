@@ -1,5 +1,5 @@
 ---
-title: "p8105_final_project"
+title: "p8105_final_project_proposal"
 author: "Leila Yan, Tong Su, Shike Zhang, Shumei Liu, Alice Mao"
 date: "2024-11-06"
 output: github_document

@@ -1,4 +1,4 @@
-p8105_final_project
+p8105_final_project_proposal
 ================
 Leila Yan, Tong Su, Shike Zhang, Shumei Liu, Alice Mao
 2024-11-06
