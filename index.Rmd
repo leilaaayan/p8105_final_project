@@ -1,11 +1,33 @@
 ---
-title: "HIV by Neighborhood"
+title: "HIV by Neighborhood and Ethnicity"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
 
-# home page
+---------------------------------
 
-# <img src="images/xxx.jpeg" style="width:75%">
+## Introduction
+
+HIV (Human Immunodeficiency Virus) is a virus that attacks the body’s immune system, specifically targeting CD4 cells (T cells), which are crucial for fighting infections. If left untreated, HIV can weaken the immune system over time, leading to AIDS (Acquired Immunodeficiency Syndrome), the most severe stage of the virus. HIV is primarily transmitted through blood, semen, vaginal and rectal fluids, and breast milk, often via unprotected sex, sharing needles, or mother-to-child transmission during childbirth or breastfeeding. While there is no cure, effective antiretroviral therapy (ART) can suppress the virus to undetectable levels, preventing disease progression and reducing transmission. With proper treatment and preventive measures like PrEP, HIV is now a manageable chronic condition, allowing individuals to live long, healthy lives.
+
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics("images/hiv.jpg")
+```
+
+Understanding the distribution of HIV among racial groups in different areas of New York City is crucial for addressing health disparities and promoting social equity. Differences in HIV rates across racial and geographic lines often highlight deeper issues, such as socioeconomic inequality, limited access to healthcare, and systemic discrimination. By identifying the most affected communities, this research provides valuable insights for designing targeted prevention and treatment strategies that meet the specific needs of high-risk populations. Ultimately, these efforts aim to reduce health inequities and improve public health outcomes throughout the city.
+
+---------------------------------
+
+## Distribution Map
+
+```{r}
+
+```
+
+---------------------------------
+
+## Screencast
+
+

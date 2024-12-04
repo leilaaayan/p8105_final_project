@@ -6,4 +6,14 @@ output:
     toc_float: true
 ---
 
-# imformation about group members
+---------------------------------
+
+## Leila Yan
+
+## Tong Su
+
+## Shike Zhang
+
+## Shumei Liu
+
+## Alice Mao

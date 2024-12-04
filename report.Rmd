@@ -6,16 +6,44 @@ output:
     toc_float: true
 ---
 
-# Motivation: Provide an overview of the project goals and motivation.
+---------------------------------
 
-#Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+## Motivation 
 
-# Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+Our project aims to address the critical public health challenge of HIV by understanding its distribution among racial groups in New York City. December 1, designated as World AIDS Day by the WHO, underscores the urgency of raising awareness and preventing the spread of HIV (HIV can progress to AIDS if left untreated). By identifying the most affected communities, we seek to uncover systemic issues like socioeconomic inequality and healthcare access disparities, guiding targeted interventions to reduce health inequities and promote social equity.
 
-# Data: Source, scraping method, cleaning, etc.
+---------------------------------
 
-# Exploratory analysis: Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+## Related work 
 
-# Additional analysis: If you undertake formal statistical analyses, describe these in detail
+Anything that inspired you, such as a paper, a web site, or something we discussed in class.
 
-# Discussion: What were your findings? Are they what you expect? What insights into the data can you make?
+---------------------------------
+
+## Initial questions 
+
+What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+
+---------------------------------
+
+## Data 
+
+Source, scraping method, cleaning, etc.
+
+---------------------------------
+
+## Exploratory analysis 
+
+Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+---------------------------------
+
+## Additional analysis
+
+If you undertake formal statistical analyses, describe these in detail
+
+---------------------------------
+
+## Discussion
+
+What were your findings? Are they what you expect? What insights into the data can you make?
