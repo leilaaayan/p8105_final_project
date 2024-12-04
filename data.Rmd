@@ -6,6 +6,18 @@ output:
     toc_float: true
 ---
 
+```{r}
+library(tidyverse)
+```
+
+```{r}
+data = read_csv("./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")
+```
+
+
+
+
+
 # Data sources
 
 # Data processing
