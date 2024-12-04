@@ -1,0 +1,22 @@
+name: "Fianl project internet!"
+output_dir: "."
+navbar:
+  title: "Home"
+  left:
+    - text: "Data Analysis"
+      href: data.html
+    - text: "Model Analysis"
+      href: model.html
+    - text: "Project Report"
+      href: report.html
+  right:
+    - text: "About The Team"
+      href: about.html
+    - icon: fa-envelope fa-lg
+      href: mailto:<you@youremail.com>
+    - icon: fa-github fa-lg
+      href: http://github.com/leilaaayan/
+
+output:
+  html_document:
+    theme: readable
