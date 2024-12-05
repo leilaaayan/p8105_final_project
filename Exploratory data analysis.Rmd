@@ -1,0 +1,100 @@
+---
+title: "Exploratory Data Analysis"
+author: "Tong Su"
+date: "2024-12-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, include=FALSE}
+library(tidyverse)
+library(plotly)
+
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+# Load the dataset
+HIV_df = read.csv("./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")|>
+  janitor::clean_names()
+
+UHF_df = read.csv("./data/UHF_Neighborhoods.csv")|>
+   janitor::clean_names()
+```
+YEAR: Year of diagnosis.
+Borough: Borough information (some missing values).
+Neighborhood (U.H.F): Specific neighborhood identifiers.
+SEX: Sex of individuals.
+RACE/ETHNICITY: Racial/ethnic group classifications.
+TOTAL NUMBER OF HIV DIAGNOSES: Counts of HIV diagnoses.
+HIV DIAGNOSES PER 100,000 POPULATION: Rate of diagnoses normalized by population.
+TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES: Concurrent diagnoses of HIV and AIDS.
+PROPORTION OF CONCURRENT HIV/AIDS DIAGNOSES: Percentage of concurrent diagnoses.
+TOTAL NUMBER OF AIDS DIAGNOSES: Counts of AIDS diagnoses.
+AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses normalized by population.
+```{r}
+skimr::skim(HIV_df)
+```
+
+```{r}
+HIV_cleaned_df = HIV_df |>
+  # Select rows where year 2016~2021
+  filter(year >= 2016) |>
+  # Convert Borough, Neighborhood (U.H.F), SEX, RACE/ETHNICITY to factors
+  mutate(
+    borough = as.factor(borough),
+    neighborhood_u_h_f = as.factor(neighborhood_u_h_f),
+    sex = as.factor(sex),
+    race_ethnicity = as.factor(race_ethnicity)
+  ) %>%
+  # Convert necessary columns to numeric, handling non-numeric values
+  mutate(
+    total_number_of_hiv_diagnoses = as.numeric(total_number_of_hiv_diagnoses),
+    hiv_diagnoses_per_100_000_population = as.numeric(hiv_diagnoses_per_100_000_population),
+    total_number_of_concurrent_hiv_aids_diagnoses = as.numeric(total_number_of_concurrent_hiv_aids_diagnoses),
+    proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses = as.numeric(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses),
+    total_number_of_aids_diagnoses = as.numeric(total_number_of_aids_diagnoses),
+    aids_diagnoses_per_100_000_population = as.numeric(aids_diagnoses_per_100_000_population)
+  )
+```
+
+```{r}
+HIV_UHF_df = HIV_cleaned_df |>
+  inner_join(UHF_df, by = c("borough", "neighborhood_u_h_f" = "uhf_neighborhood"))
+
+# Export the merged data
+write.csv(HIV_UHF_df, "Merged_HIV_UHF_Data.csv", row.names = FALSE)
+```
+
+```{r}
+# Group by Borough and Year and calculate average HIV diagnosis rates
+borough_trends = HIV_UHF_df |>
+  group_by(borough, year) |>
+  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))
+
+borough_trends
+```
+
+
+```{r}
+# Plot HIV rates by Borough over time
+ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  labs(
+    title = "HIV Diagnosis Rates by Borough Over Time",
+    x = "Year",
+    y = "Average HIV Diagnosis Rate (Per 100,000 Population)",
+    color = "Borough"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 12),
+    legend.position = "bottom"
+  )
+```
