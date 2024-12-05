@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Tong Su" />
 
+<meta name="date" content="2024-12-05" />
 
-<title>Project Report</title>
+<title>Exploratory Data Analysis</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -355,60 +357,327 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Project Report</h1>
+<h1 class="title toc-ignore">Exploratory Data Analysis</h1>
+<h4 class="author">Tong Su</h4>
+<h4 class="date">2024-12-05</h4>
 
 </div>
 
 
-<hr />
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
-<p>Our project aims to address the critical public health challenge of
-HIV by understanding its distribution among racial groups in New York
-City. December 1, designated as World AIDS Day by the WHO, underscores
-the urgency of raising awareness and preventing the spread of HIV (HIV
-can progress to AIDS if left untreated). By identifying the most
-affected communities, we seek to uncover systemic issues like
-socioeconomic inequality and healthcare access disparities, guiding
-targeted interventions to reduce health inequities and promote social
-equity.</p>
-<hr />
+<div id="data-import-and-cleaning" class="section level2">
+<h2>Data Import and Cleaning</h2>
+<pre class="r"><code># Import the HIV and UHF datasets
+HIV_df =
+  read.csv(&quot;./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv&quot;)|&gt;
+  janitor::clean_names()
+
+UHF_df = 
+  read.csv(&quot;./data/UHF_Neighborhoods.csv&quot;)|&gt;
+   janitor::clean_names()
+
+# Clean HIV dataset
+HIV_cleaned_df = HIV_df |&gt;
+  # Select rows where year 2016~2021
+  filter(year &gt;= 2016) |&gt;
+  # Convert Borough, Neighborhood (U.H.F), SEX, RACE/ETHNICITY to factors
+  mutate(
+    borough = as.factor(borough),
+    neighborhood_u_h_f = as.factor(neighborhood_u_h_f),
+    sex = as.factor(sex),
+    race_ethnicity = as.factor(race_ethnicity)
+  ) %&gt;%
+  # Convert necessary columns to numeric, handling non-numeric values
+  mutate(
+    total_number_of_hiv_diagnoses = as.numeric(total_number_of_hiv_diagnoses),
+    hiv_diagnoses_per_100_000_population = as.numeric(hiv_diagnoses_per_100_000_population),
+    total_number_of_concurrent_hiv_aids_diagnoses = as.numeric(total_number_of_concurrent_hiv_aids_diagnoses),
+    proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses = as.numeric(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses),
+    total_number_of_aids_diagnoses = as.numeric(total_number_of_aids_diagnoses),
+    aids_diagnoses_per_100_000_population = as.numeric(aids_diagnoses_per_100_000_population)
+  )
+
+# Merge datasets
+HIV_UHF_df = HIV_cleaned_df |&gt;
+  inner_join(UHF_df, by = c(&quot;borough&quot;, &quot;neighborhood_u_h_f&quot; = &quot;uhf_neighborhood&quot;))</code></pre>
+<div id="data-dictionary" class="section level3">
+<h3>Data Dictionary</h3>
+<ul>
+<li><p>YEAR: Year of diagnosis.</p></li>
+<li><p>Borough: Borough information (some missing values).</p></li>
+<li><p>Neighborhood (U.H.F): Specific neighborhood identifiers.</p></li>
+<li><p>SEX: Sex of individuals.</p></li>
+<li><p>RACE/ETHNICITY: Racial/ethnic group classifications.</p></li>
+<li><p>TOTAL NUMBER OF HIV DIAGNOSES: Counts of HIV diagnoses.</p></li>
+<li><p>HIV DIAGNOSES PER 100,000 POPULATION: Rate of diagnoses
+normalized by population.</p></li>
+<li><p>TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES: Concurrent
+diagnoses of HIV and AIDS.</p></li>
+<li><p>PROPORTION OF CONCURRENT HIV/AIDS DIAGNOSES: Percentage of
+concurrent diagnoses.</p></li>
+<li><p>TOTAL NUMBER OF AIDS DIAGNOSES: Counts of AIDS
+diagnoses.</p></li>
+<li><p>AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses
+normalized by population.</p></li>
+</ul>
 </div>
-<div id="related-work" class="section level2">
-<h2>Related work</h2>
-<p>Anything that inspired you, such as a paper, a web site, or something
-we discussed in class.</p>
-<hr />
+<div id="data-summary" class="section level3">
+<h3>Data Summary</h3>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">HIV_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">8976</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">11</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<colgroup>
+<col width="53%" />
+<col width="7%" />
+<col width="11%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="7%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">borough</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="right">2928</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">neighborhood_u_h_f</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">66</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicity</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">22</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_hiv_diagnoses</td>
+<td align="right">6</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">306</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">hiv_diagnoses_per_100_000_population</td>
+<td align="right">74</td>
+<td align="right">0.99</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1260</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_concurrent_hiv_aids_diagnoses</td>
+<td align="right">2</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">121</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td
+align="left">proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses</td>
+<td align="right">1893</td>
+<td align="right">0.79</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">305</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_aids_diagnoses</td>
+<td align="right">3</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">238</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">aids_diagnoses_per_100_000_population</td>
+<td align="right">71</td>
+<td align="right">0.99</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">991</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="17%" />
+<col width="9%" />
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2016.36</td>
+<td align="right">3.7</td>
+<td align="right">2010</td>
+<td align="right">2013</td>
+<td align="right">2017</td>
+<td align="right">2020</td>
+<td align="right">2021</td>
+<td align="left">▅▂▂▃▇</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="initial-questions" class="section level2">
-<h2>Initial questions</h2>
-<p>What questions are you trying to answer? How did these questions
-evolve over the course of the project? What new questions did you
-consider in the course of your analysis?</p>
-<hr />
 </div>
-<div id="data" class="section level2">
-<h2>Data</h2>
-<p>Source, scraping method, cleaning, etc.</p>
-<hr />
-</div>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory analysis</h2>
-<p>Visualizations, summaries, and exploratory statistical analyses.
-Justify the steps you took, and show any major changes to your
-ideas.</p>
-<hr />
-</div>
-<div id="additional-analysis" class="section level2">
-<h2>Additional analysis</h2>
-<p>If you undertake formal statistical analyses, describe these in
-detail</p>
-<hr />
-</div>
-<div id="discussion" class="section level2">
-<h2>Discussion</h2>
-<p>What were your findings? Are they what you expect? What insights into
-the data can you make?</p>
+<div id="average-hiv-diagnosis-rates" class="section level2">
+<h2>Average HIV Diagnosis Rates</h2>
+<pre class="r"><code># Group by Borough and Year and calculate average HIV diagnosis rates
+borough_trends = HIV_UHF_df |&gt;
+  group_by(borough, year) |&gt;
+  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))
+
+borough_trends</code></pre>
+<pre><code>## # A tibble: 30 × 3
+## # Groups:   borough [5]
+##    borough   year Avg_HIV_Rate
+##    &lt;chr&gt;    &lt;int&gt;        &lt;dbl&gt;
+##  1 Bronx     2016         44.3
+##  2 Bronx     2017         52.3
+##  3 Bronx     2018         27.6
+##  4 Bronx     2019         59.4
+##  5 Bronx     2020         34.0
+##  6 Bronx     2021         43.2
+##  7 Brooklyn  2016         26.2
+##  8 Brooklyn  2017         32.2
+##  9 Brooklyn  2018         22.7
+## 10 Brooklyn  2019         23.5
+## # ℹ 20 more rows</code></pre>
+<pre class="r"><code># Plot HIV rates by Borough over time
+ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
+  geom_line(linewidth = 0.6) +
+  geom_point(size = 1.5) +
+  labs(
+    title = &quot;HIV Diagnosis Rates by Borough Over Time&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average HIV Diagnosis Rate (Per 100,000 Population)&quot;,
+    color = &quot;Borough&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 10),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 </div>
 
 

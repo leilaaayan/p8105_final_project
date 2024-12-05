@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Tong Su" />
+
+<meta name="date" content="2024-12-04" />
+
+<title>Exploratory Data Analysis</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Exploratory_data_analysis.html">Exploratory Data Analysis</a>
+</li>
+<li>
+  <a href="model.html">Model Analysis</a>
+</li>
+<li>
+  <a href="report.html">Project Report</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About The Team</a>
+</li>
+<li>
+  <a href="mailto:&lt;you@youremail.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/leilaaayan/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Exploratory Data Analysis</h1>
+<h4 class="author">Tong Su</h4>
+<h4 class="date">2024-12-04</h4>
+
+</div>
+
+
+<pre class="r"><code># Load the dataset
+HIV_df = read.csv(&quot;./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv&quot;)|&gt;
+  janitor::clean_names()
+
+UHF_df = read.csv(&quot;./data/UHF_Neighborhoods.csv&quot;)|&gt;
+   janitor::clean_names()</code></pre>
+<p>YEAR: Year of diagnosis. Borough: Borough information (some missing
+values). Neighborhood (U.H.F): Specific neighborhood identifiers. SEX:
+Sex of individuals. RACE/ETHNICITY: Racial/ethnic group classifications.
+TOTAL NUMBER OF HIV DIAGNOSES: Counts of HIV diagnoses. HIV DIAGNOSES
+PER 100,000 POPULATION: Rate of diagnoses normalized by population.
+TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES: Concurrent diagnoses of
+HIV and AIDS. PROPORTION OF CONCURRENT HIV/AIDS DIAGNOSES: Percentage of
+concurrent diagnoses. TOTAL NUMBER OF AIDS DIAGNOSES: Counts of AIDS
+diagnoses. AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses
+normalized by population.</p>
+<pre class="r"><code>skimr::skim(HIV_df)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">HIV_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">8976</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">11</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<colgroup>
+<col width="53%" />
+<col width="7%" />
+<col width="11%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="7%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">borough</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="right">2928</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">neighborhood_u_h_f</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">66</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">race_ethnicity</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">22</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_hiv_diagnoses</td>
+<td align="right">6</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">306</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">hiv_diagnoses_per_100_000_population</td>
+<td align="right">74</td>
+<td align="right">0.99</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1260</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_concurrent_hiv_aids_diagnoses</td>
+<td align="right">2</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">121</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td
+align="left">proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses</td>
+<td align="right">1893</td>
+<td align="right">0.79</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">305</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">total_number_of_aids_diagnoses</td>
+<td align="right">3</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">238</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">aids_diagnoses_per_100_000_population</td>
+<td align="right">71</td>
+<td align="right">0.99</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">991</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="17%" />
+<col width="9%" />
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2016.36</td>
+<td align="right">3.7</td>
+<td align="right">2010</td>
+<td align="right">2013</td>
+<td align="right">2017</td>
+<td align="right">2020</td>
+<td align="right">2021</td>
+<td align="left">▅▂▂▃▇</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>HIV_cleaned_df = HIV_df |&gt;
+  # Select rows where year 2016~2021
+  filter(year &gt;= 2016) |&gt;
+  # Convert Borough, Neighborhood (U.H.F), SEX, RACE/ETHNICITY to factors
+  mutate(
+    borough = as.factor(borough),
+    neighborhood_u_h_f = as.factor(neighborhood_u_h_f),
+    sex = as.factor(sex),
+    race_ethnicity = as.factor(race_ethnicity)
+  ) %&gt;%
+  # Convert necessary columns to numeric, handling non-numeric values
+  mutate(
+    total_number_of_hiv_diagnoses = as.numeric(total_number_of_hiv_diagnoses),
+    hiv_diagnoses_per_100_000_population = as.numeric(hiv_diagnoses_per_100_000_population),
+    total_number_of_concurrent_hiv_aids_diagnoses = as.numeric(total_number_of_concurrent_hiv_aids_diagnoses),
+    proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses = as.numeric(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses),
+    total_number_of_aids_diagnoses = as.numeric(total_number_of_aids_diagnoses),
+    aids_diagnoses_per_100_000_population = as.numeric(aids_diagnoses_per_100_000_population)
+  )</code></pre>
+<pre class="r"><code>HIV_UHF_df = HIV_cleaned_df |&gt;
+  inner_join(UHF_df, by = c(&quot;borough&quot;, &quot;neighborhood_u_h_f&quot; = &quot;uhf_neighborhood&quot;))
+
+# Export the merged data
+write.csv(HIV_UHF_df, &quot;Merged_HIV_UHF_Data.csv&quot;, row.names = FALSE)</code></pre>
+<pre class="r"><code># Group by Borough and Year and calculate average HIV diagnosis rates
+borough_trends = HIV_UHF_df |&gt;
+  group_by(borough, year) |&gt;
+  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>borough_trends</code></pre>
+<pre><code>## # A tibble: 30 × 3
+## # Groups:   borough [5]
+##    borough   year Avg_HIV_Rate
+##    &lt;chr&gt;    &lt;int&gt;        &lt;dbl&gt;
+##  1 Bronx     2016         44.3
+##  2 Bronx     2017         52.3
+##  3 Bronx     2018         27.6
+##  4 Bronx     2019         59.4
+##  5 Bronx     2020         34.0
+##  6 Bronx     2021         43.2
+##  7 Brooklyn  2016         26.2
+##  8 Brooklyn  2017         32.2
+##  9 Brooklyn  2018         22.7
+## 10 Brooklyn  2019         23.5
+## # ℹ 20 more rows</code></pre>
+<pre class="r"><code># Plot HIV rates by Borough over time
+ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  labs(
+    title = &quot;HIV Diagnosis Rates by Borough Over Time&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average HIV Diagnosis Rate (Per 100,000 Population)&quot;,
+    color = &quot;Borough&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 12),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="Untitled_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

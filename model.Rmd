@@ -6,5 +6,5 @@ output:
     toc_float: true
 ---
 
-# EDA 
+ 
 # Linear model

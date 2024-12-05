@@ -321,7 +321,7 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="data.html">Data Analysis</a>
+  <a href="Exploratory_data_analysis.html">Exploratory Data Analysis</a>
 </li>
 <li>
   <a href="model.html">Model Analysis</a>
@@ -361,23 +361,23 @@ div.tocify {
 
 
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+<pre><code>## ── Attaching core tidyverse packages ───── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>data = read_csv(&quot;./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv&quot;)</code></pre>
-<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-## e.g.:
+<pre><code>## Warning: One or more parsing issues, call `problems()` on your data
+## frame for details, e.g.:
 ##   dat &lt;- vroom(...)
 ##   problems(dat)</code></pre>
 <pre><code>## Rows: 8976 Columns: 11
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (8): Borough, Neighborhood (U.H.F), SEX, RACE/ETHNICITY, TOTAL NUMBER OF...
 ## dbl (3): YEAR, TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES, PROPORTION OF ...

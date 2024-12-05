@@ -2,46 +2,55 @@
 title: "Exploratory Data Analysis"
 author: "Tong Su"
 date: "2024-12-05"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: 
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r, include=FALSE}
 library(tidyverse)
 library(plotly)
-
 library(dplyr)
 library(ggplot2)
 ```
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Data Import and Cleaning
+
 ```{r}
-# Load the dataset
-HIV_df = read.csv("./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")|>
+# Import the HIV and UHF datasets
+HIV_df =
+  read.csv("./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")|>
   janitor::clean_names()
 
-UHF_df = read.csv("./data/UHF_Neighborhoods.csv")|>
+UHF_df = 
+  read.csv("./data/UHF_Neighborhoods.csv")|>
    janitor::clean_names()
-```
-YEAR: Year of diagnosis.
-Borough: Borough information (some missing values).
-Neighborhood (U.H.F): Specific neighborhood identifiers.
-SEX: Sex of individuals.
-RACE/ETHNICITY: Racial/ethnic group classifications.
-TOTAL NUMBER OF HIV DIAGNOSES: Counts of HIV diagnoses.
-HIV DIAGNOSES PER 100,000 POPULATION: Rate of diagnoses normalized by population.
-TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES: Concurrent diagnoses of HIV and AIDS.
-PROPORTION OF CONCURRENT HIV/AIDS DIAGNOSES: Percentage of concurrent diagnoses.
-TOTAL NUMBER OF AIDS DIAGNOSES: Counts of AIDS diagnoses.
-AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses normalized by population.
-```{r}
-skimr::skim(HIV_df)
-```
 
-```{r}
+# Clean HIV dataset
 HIV_cleaned_df = HIV_df |>
   # Select rows where year 2016~2021
   filter(year >= 2016) |>
@@ -61,17 +70,50 @@ HIV_cleaned_df = HIV_df |>
     total_number_of_aids_diagnoses = as.numeric(total_number_of_aids_diagnoses),
     aids_diagnoses_per_100_000_population = as.numeric(aids_diagnoses_per_100_000_population)
   )
-```
 
-```{r}
+# Merge datasets
 HIV_UHF_df = HIV_cleaned_df |>
   inner_join(UHF_df, by = c("borough", "neighborhood_u_h_f" = "uhf_neighborhood"))
+```
 
+```{r, include=FALSE}
 # Export the merged data
 write.csv(HIV_UHF_df, "Merged_HIV_UHF_Data.csv", row.names = FALSE)
 ```
 
-```{r}
+### Data Dictionary
+
+* YEAR: Year of diagnosis.
+
+* Borough: Borough information (some missing values).
+
+* Neighborhood (U.H.F): Specific neighborhood identifiers.
+
+* SEX: Sex of individuals.
+
+* RACE/ETHNICITY: Racial/ethnic group classifications.
+
+* TOTAL NUMBER OF HIV DIAGNOSES: Counts of HIV diagnoses.
+
+* HIV DIAGNOSES PER 100,000 POPULATION: Rate of diagnoses normalized by population.
+
+* TOTAL NUMBER OF CONCURRENT HIV/AIDS DIAGNOSES: Concurrent diagnoses of HIV and AIDS.
+
+* PROPORTION OF CONCURRENT HIV/AIDS DIAGNOSES: Percentage of concurrent diagnoses.
+
+* TOTAL NUMBER OF AIDS DIAGNOSES: Counts of AIDS diagnoses.
+
+* AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses normalized by population.
+
+### Data Summary
+
+```{r, echo=FALSE}
+skimr::skim(HIV_df)
+```
+
+## Average HIV Diagnosis Rates
+
+```{r, message=FALSE}
 # Group by Borough and Year and calculate average HIV diagnosis rates
 borough_trends = HIV_UHF_df |>
   group_by(borough, year) |>
@@ -80,12 +122,11 @@ borough_trends = HIV_UHF_df |>
 borough_trends
 ```
 
-
 ```{r}
 # Plot HIV rates by Borough over time
 ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
-  geom_line(size = 1.2) +
-  geom_point(size = 3) +
+  geom_line(linewidth = 0.6) +
+  geom_point(size = 1.5) +
   labs(
     title = "HIV Diagnosis Rates by Borough Over Time",
     x = "Year",
@@ -94,7 +135,7 @@ ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
   ) +
   theme_minimal() +
   theme(
-    text = element_text(size = 12),
+    text = element_text(size = 10),
     legend.position = "bottom"
   )
 ```
