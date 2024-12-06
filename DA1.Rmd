@@ -1,0 +1,315 @@
+---
+title: "DA"
+author: "Alice Mao"
+date: "2024-12-05"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load required libraries
+library(tidyverse)
+library(ggplot2)
+library(broom)
+```
+```{r}
+# Load the dataset
+hiv_data <- read.csv("data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")
+
+UHF <- read.csv("data/UHF_Neighborhoods.csv")
+
+```
+
+
+Q1: How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
+```{r}
+# Clean and prepare the dataset
+hiv_data <- hiv_data %>%
+  mutate(
+    YEAR = as.numeric(YEAR),
+    Neighborhood = as.character(Neighborhood..U.H.F.), # Correct column for neighborhood
+    HIV_Diagnoses = as.numeric(HIV.DIAGNOSES.PER.100.000.POPULATION),
+    AIDS_Diagnoses = as.numeric(AIDS.DIAGNOSES.PER.100.000.POPULATION)
+  ) %>%
+  filter(YEAR >= 2016, !is.na(HIV_Diagnoses), !is.na(AIDS_Diagnoses)) # Keep only data from 2016 onwards
+
+```
+
+
+```{r}
+# Aggregate HIV and AIDS diagnoses
+hiv_trends <- hiv_data %>%
+  group_by(YEAR, Neighborhood) %>%
+  summarise(
+    avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE),
+    avg_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+# Preview the aggregated data
+head(hiv_trends)
+```
+
+```{r}
+# Plot HIV diagnosis trends by neighborhood with a legend
+ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  labs(
+    title = "Temporal Trends in HIV Diagnoses by Neighborhood (2016 Onwards)",
+    x = "Year",
+    y = "Average HIV Diagnoses per 100,000 Population",
+    color = "Neighborhood"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", # Display the legend on the right
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )
+
+```
+
+```{r}
+# Calculate the mean HIV diagnosis rate for each neighborhood
+top_neighborhoods <- hiv_data %>%
+  group_by(Neighborhood) %>%
+  summarise(mean_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %>%
+  arrange(desc(mean_hiv_rate)) %>%
+  slice(1:10) %>%
+  pull(Neighborhood)
+
+# Filter the dataset for the top 10 neighborhoods
+filtered_hiv_data <- hiv_data %>%
+  filter(Neighborhood %in% top_neighborhoods)
+
+# Aggregate HIV diagnoses for the top 10 neighborhoods
+top_hiv_trends <- filtered_hiv_data %>%
+  group_by(YEAR, Neighborhood) %>%
+  summarise(
+    avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+# Preview the aggregated data
+head(top_hiv_trends)
+
+# Plot HIV diagnosis trends for the top 10 neighborhoods
+ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = "Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods (2016 Onwards)",
+    x = "Year",
+    y = "Average HIV Diagnoses per 100,000 Population",
+    color = "Neighborhood"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 12),
+    plot.title = element_text(hjust = 0.5, size = 14)
+  )
+
+```
+
+
+```{r}
+# Plot AIDS diagnosis trends by neighborhood with a legend
+ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  labs(
+    title = "Temporal Trends in AIDS Diagnoses by Neighborhood (2016 Onwards)",
+    x = "Year",
+    y = "Average AIDS Diagnoses per 100,000 Population",
+    color = "Neighborhood"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", # Display the legend on the right
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )
+
+```
+
+```{r}
+# Calculate mean rates for each neighborhood
+top_hiv_neighborhoods <- hiv_data %>%
+  group_by(Neighborhood) %>%
+  summarise(mean_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %>%
+  arrange(desc(mean_hiv_rate)) %>%
+  slice(1:10) %>%
+  pull(Neighborhood)
+
+top_aids_neighborhoods <- hiv_data %>%
+  group_by(Neighborhood) %>%
+  summarise(mean_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)) %>%
+  arrange(desc(mean_aids_rate)) %>%
+  slice(1:10) %>%
+  pull(Neighborhood)
+
+# Filter the dataset for top 10 neighborhoods
+filtered_hiv_trends <- hiv_data %>%
+  filter(Neighborhood %in% top_hiv_neighborhoods) %>%
+  group_by(YEAR, Neighborhood) %>%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %>%
+  ungroup()
+
+filtered_aids_trends <- hiv_data %>%
+  filter(Neighborhood %in% top_aids_neighborhoods) %>%
+  group_by(YEAR, Neighborhood) %>%
+  summarise(avg_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)) %>%
+  ungroup()
+
+# Plot HIV diagnosis trends
+ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods, 2016 Onwards)",
+    x = "Year",
+    y = "Average HIV Diagnoses per 100,000 Population",
+    color = "Neighborhood"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right", # Display legend
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )
+
+```
+
+
+
+```{r}
+# Fit a linear regression model for year predicting HIV diagnosis rates
+hiv_lm <- lm(avg_hiv_rate ~ YEAR, data = hiv_trends)
+
+# Summarize the regression model
+hiv_lm_summary <- summary(hiv_lm)
+
+# Display regression coefficients
+tidy(hiv_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)
+
+# Identify neighborhoods with consistently high HIV diagnosis rates
+high_hiv_neighborhoods <- hiv_trends %>%
+  group_by(Neighborhood) %>%
+  summarise(mean_hiv_rate = mean(avg_hiv_rate, na.rm = TRUE)) %>%
+  arrange(desc(mean_hiv_rate)) %>%
+  filter(mean_hiv_rate > quantile(mean_hiv_rate, 0.9)) # Top 10% neighborhoods
+
+# Display the neighborhoods with high HIV rates
+high_hiv_neighborhoods %>%
+  knitr::kable(digits = 2)
+
+```
+
+
+```{r}
+
+tidy(hiv_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)
+
+```
+
+
+Q2: 
+
+```{r}
+# Group by sex and calculate average HIV diagnoses
+hiv_by_sex <- hiv_data %>%
+  group_by(SEX) %>%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %>%
+  arrange(desc(avg_hiv_rate))
+
+# Group by race/ethnicity and calculate average HIV diagnoses
+hiv_by_race <- hiv_data %>%
+  group_by(RACE.ETHNICITY) %>%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %>%
+  arrange(desc(avg_hiv_rate))
+
+# Display the summaries
+hiv_by_sex %>%
+  knitr::kable(digits = 2, caption = "Average HIV Diagnosis Rates by Sex")
+
+hiv_by_race %>%
+  knitr::kable(digits = 2, caption = "Average HIV Diagnosis Rates by Race/Ethnicity")
+
+# Bar plot for HIV diagnosis rates by sex
+ggplot(hiv_by_sex, aes(x = SEX, y = avg_hiv_rate, fill = SEX)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "HIV Diagnosis Rates by Sex",
+    x = "Sex",
+    y = "Average HIV Diagnoses per 100,000 Population"
+  ) +
+  theme_minimal()
+
+# Bar plot for HIV diagnosis rates by race/ethnicity
+ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_rate, fill = RACE.ETHNICITY)) +
+  geom_bar(stat = "identity") +
+  coord_flip() + # Flip for better readability
+  labs(
+    title = "HIV Diagnosis Rates by Race/Ethnicity",
+    x = "Race/Ethnicity",
+    y = "Average HIV Diagnoses per 100,000 Population"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+```{r}
+# Fit a linear regression model for HIV diagnosis rates
+hiv_lm <- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
+
+# Summarize the regression model
+hiv_lm_summary <- summary(hiv_lm)
+
+# Display regression coefficients
+tidy(hiv_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%
+  knitr::kable(digits = 3, caption = "Linear Regression: Predicting HIV Diagnoses")
+
+
+```
+
+```{r}
+# Fit a multivariate regression model adjusting for year and neighborhood
+hiv_multivariate_lm <- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY + YEAR + Neighborhood..U.H.F., data = hiv_data)
+
+# Summarize the multivariate regression model
+tidy(hiv_multivariate_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%
+  knitr::kable(digits = 10, caption = "Multivariate Regression: Adjusting for Confounders")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
