@@ -639,14 +639,18 @@ align="left">proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses
 </table>
 </div>
 </div>
-<div id="average-hiv-diagnosis-rates" class="section level2">
-<h2>Average HIV Diagnosis Rates</h2>
+<div id="eda" class="section level1">
+<h1>EDA</h1>
+<div id="temporal-trends" class="section level2">
+<h2>Temporal trends</h2>
+<div id="temporal-trends-of-hiv-diagnoses" class="section level3">
+<h3>Temporal trends of HIV diagnoses</h3>
 <pre class="r"><code># Group by Borough and Year and calculate average HIV diagnosis rates
-borough_trends = HIV_UHF_df |&gt;
+avg_hiv = HIV_UHF_df |&gt;
   group_by(borough, year) |&gt;
   summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))
 
-borough_trends</code></pre>
+avg_hiv</code></pre>
 <pre><code>## # A tibble: 30 × 3
 ## # Groups:   borough [5]
 ##    borough   year Avg_HIV_Rate
@@ -663,7 +667,7 @@ borough_trends</code></pre>
 ## 10 Brooklyn  2019         23.5
 ## # ℹ 20 more rows</code></pre>
 <pre class="r"><code># Plot HIV rates by Borough over time
-ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
+ggplot(avg_hiv, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
   geom_line(linewidth = 0.6) +
   geom_point(size = 1.5) +
   labs(
@@ -678,6 +682,207 @@ ggplot(borough_trends, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
     legend.position = &quot;bottom&quot;
   )</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+</div>
+<div id="temporal-trends-of-aid-diagnoses" class="section level3">
+<h3>Temporal trends of AID diagnoses</h3>
+<pre class="r"><code># Group by Borough and Year and calculate average AIDS diagnosis rates
+avg_aids = HIV_UHF_df |&gt;
+  group_by(borough, year) |&gt;
+  summarise(Avg_AIDS_Rate = mean(aids_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>avg_aids</code></pre>
+<pre><code>## # A tibble: 30 × 3
+## # Groups:   borough [5]
+##    borough   year Avg_AIDS_Rate
+##    &lt;chr&gt;    &lt;int&gt;         &lt;dbl&gt;
+##  1 Bronx     2016          50.9
+##  2 Bronx     2017          20.4
+##  3 Bronx     2018          32.7
+##  4 Bronx     2019          45.4
+##  5 Bronx     2020          36.3
+##  6 Bronx     2021          72.9
+##  7 Brooklyn  2016          12.8
+##  8 Brooklyn  2017          18.9
+##  9 Brooklyn  2018          14.1
+## 10 Brooklyn  2019          11.0
+## # ℹ 20 more rows</code></pre>
+<pre class="r"><code># Temporal trends of AIDS diagnoses
+ggplot(avg_aids, aes(x = year, y = Avg_AIDS_Rate, color = borough, group = borough)) +
+  geom_line(size = 1) +
+  geom_point() +
+  labs(
+    title = &quot;Temporal Trends: AIDS Diagnosis Rates Across Boroughs&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average AIDS Diagnosis Rate (Per 100,000 Population)&quot;,
+    color = &quot;Borough&quot;
+  ) +
+  theme_minimal()</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="demographic-disparities" class="section level2">
+<h2>Demographic Disparities</h2>
+<div id="hiv-diagnoses-by-sex-and-raceethnicity" class="section level3">
+<h3>HIV Diagnoses by Sex and Race/Ethnicity</h3>
+<pre class="r"><code># Group by Sex and Ethnicity with average rate of HIV
+avghiv_sex_ethinicity = HIV_UHF_df |&gt;
+  group_by(borough, year,sex,race_ethnicity) |&gt;
+  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;, &#39;sex&#39;. You can override
+## using the `.groups` argument.</code></pre>
+<pre class="r"><code>avghiv_sex_ethinicity</code></pre>
+<pre><code>## # A tibble: 540 × 5
+## # Groups:   borough, year, sex [90]
+##    borough  year sex    race_ethnicity            Avg_HIV_Rate
+##    &lt;chr&gt;   &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;                            &lt;dbl&gt;
+##  1 Bronx    2016 All    &quot;All&quot;                             50.5
+##  2 Bronx    2016 All    &quot;Asian/Pacific\nIslander&quot;          0  
+##  3 Bronx    2016 All    &quot;Black&quot;                           74.5
+##  4 Bronx    2016 All    &quot;Latino/Hispanic&quot;                 41.2
+##  5 Bronx    2016 All    &quot;Other/Unknown&quot;                    0  
+##  6 Bronx    2016 All    &quot;White&quot;                           94.5
+##  7 Bronx    2016 Female &quot;All&quot;                             27.9
+##  8 Bronx    2016 Female &quot;Asian/Pacific\nIslander&quot;          0  
+##  9 Bronx    2016 Female &quot;Black&quot;                           38.7
+## 10 Bronx    2016 Female &quot;Latino/Hispanic&quot;                 22  
+## # ℹ 530 more rows</code></pre>
+<pre class="r"><code># Demographic disparities in HIV diagnoses
+ggplot(avghiv_sex_ethinicity, aes(x = sex, y = Avg_HIV_Rate, fill = race_ethnicity)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;Demographic Disparities: HIV Diagnosis Rates by Sex and Race/Ethnicity&quot;,
+    x = &quot;Sex&quot;,
+    y = &quot;Average HIV Diagnosis Rate (Per 100,000 Population)&quot;,
+    fill = &quot;Race/Ethnicity&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="concurrent-diagnoses" class="section level2">
+<h2>Concurrent Diagnoses</h2>
+<div id="proportion-of-concurrent-diagnoses-by-neighborhood"
+class="section level3">
+<h3>Proportion of concurrent diagnoses by neighborhood</h3>
+<pre class="r"><code># Group by proportion of concurrent diagnoses by neighborhood
+proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
+  group_by(borough, year,neighborhood_u_h_f) |&gt;
+  summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_neighborhood</code></pre>
+<pre><code>## # A tibble: 210 × 4
+## # Groups:   borough, year [30]
+##    borough   year neighborhood_u_h_f                    Avg_proportion_Rate
+##    &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;                                               &lt;dbl&gt;
+##  1 Bronx     2016 &quot;Crotona - Tremont&quot;                                 12.4 
+##  2 Bronx     2017 &quot;Crotona - Tremont&quot;                                  6.58
+##  3 Bronx     2018 &quot;Crotona - Tremont&quot;                                 12.2 
+##  4 Bronx     2019 &quot;Crotona - Tremont&quot;                                 24.6 
+##  5 Bronx     2020 &quot;Crotona - Tremont&quot;                                 17.9 
+##  6 Bronx     2021 &quot;Crotona - Tremont&quot;                                 30.9 
+##  7 Brooklyn  2016 &quot;Bedford Stuyvesant -\nCrown Heights&quot;               18.5 
+##  8 Brooklyn  2016 &quot;Bensonhurst - Bay\nRidge&quot;                          10.2 
+##  9 Brooklyn  2016 &quot;Borough Park&quot;                                      50.0 
+## 10 Brooklyn  2016 &quot;Canarsie - Flatlands&quot;                               0   
+## # ℹ 200 more rows</code></pre>
+<pre class="r"><code>ggplot(proprotion_diagnoses_neighborhood, aes(x = neighborhood_u_h_f, y = Avg_proportion_Rate,fill=borough)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    title = &quot;Proportion of Concurrent Diagnoses by Neighborhood&quot;,
+    x = &quot;Neighborhood&quot;,
+    y = &quot;Average Proportion of Concurrent Diagnoses (%)&quot;
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_bar()`).</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
+</div>
+<div id="proportion-of-concurrent-diagnoses-by-sex"
+class="section level3">
+<h3>Proportion of Concurrent Diagnoses by Sex</h3>
+<pre class="r"><code># Group by proportion of concurrent diagnoses by borough and sex with average rate of HIV
+proprotion_diagnoses_sex = HIV_UHF_df |&gt;
+  group_by(borough, year,sex) |&gt;
+  summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_sex</code></pre>
+<pre><code>## # A tibble: 90 × 4
+## # Groups:   borough, year [30]
+##    borough  year sex    Avg_proportion_Rate
+##    &lt;chr&gt;   &lt;int&gt; &lt;fct&gt;                &lt;dbl&gt;
+##  1 Bronx    2016 All                  14.2 
+##  2 Bronx    2016 Female                5.5 
+##  3 Bronx    2016 Male                 17.6 
+##  4 Bronx    2017 All                   7.02
+##  5 Bronx    2017 Female                3.4 
+##  6 Bronx    2017 Male                  8.68
+##  7 Bronx    2018 All                  12.3 
+##  8 Bronx    2018 Female               11.8 
+##  9 Bronx    2018 Male                 12.4 
+## 10 Bronx    2019 All                  27.2 
+## # ℹ 80 more rows</code></pre>
+<pre class="r"><code># Concurrent diagnoses by borough and sex
+ggplot(proprotion_diagnoses_sex, aes(x = borough, y = as.numeric(Avg_proportion_Rate), fill = sex)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(
+    title = &quot;Proportion of Concurrent Diagnoses by Borough and Sex&quot;,
+    x = &quot;Borough&quot;,
+    y = &quot;AverageProportion of Concurrent Diagnoses (%)&quot;,
+    fill = &quot;Sex&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-15-1.png" width="90%" />
+### Proportion of Concurrent Diagnoses by Race/Ethnicity</p>
+<pre class="r"><code># Group by proportion of concurrent diagnoses by borough and ethnicity with average rate of HIV
+proprotion_diagnoses_race = HIV_UHF_df |&gt;
+  group_by(borough, year,race_ethnicity) |&gt;
+  summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_race</code></pre>
+<pre><code>## # A tibble: 180 × 4
+## # Groups:   borough, year [30]
+##    borough  year race_ethnicity            Avg_proportion_Rate
+##    &lt;chr&gt;   &lt;int&gt; &lt;fct&gt;                                   &lt;dbl&gt;
+##  1 Bronx    2016 &quot;All&quot;                                   16.4 
+##  2 Bronx    2016 &quot;Asian/Pacific\nIslander&quot;              NaN   
+##  3 Bronx    2016 &quot;Black&quot;                                 15.4 
+##  4 Bronx    2016 &quot;Latino/Hispanic&quot;                       17.9 
+##  5 Bronx    2016 &quot;Other/Unknown&quot;                        NaN   
+##  6 Bronx    2016 &quot;White&quot;                                  0   
+##  7 Bronx    2017 &quot;All&quot;                                    9.47
+##  8 Bronx    2017 &quot;Asian/Pacific\nIslander&quot;              NaN   
+##  9 Bronx    2017 &quot;Black&quot;                                 15.1 
+## 10 Bronx    2017 &quot;Latino/Hispanic&quot;                        6.17
+## # ℹ 170 more rows</code></pre>
+<pre class="r"><code># Concurrent diagnoses by race/ethnicity and borough
+ggplot(proprotion_diagnoses_race, aes(x = race_ethnicity, y = as.numeric(Avg_proportion_Rate), fill = borough)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(
+    title = &quot;Proportion of Concurrent Diagnoses by Race/Ethnicity and Borough&quot;,
+    x = &quot;Race/Ethnicity&quot;,
+    y = &quot;Average Proportion of Concurrent Diagnoses (%)&quot;,
+    fill = &quot;Borough&quot;
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<pre><code>## Warning: Removed 15 rows containing missing values or values outside the scale range
+## (`geom_bar()`).</code></pre>
+<p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
+</div>
+</div>
 </div>
 
 
