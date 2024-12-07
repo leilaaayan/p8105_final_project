@@ -1,0 +1,127 @@
+---
+title: "Research Question 3 Updated"
+author: "Leila Yan"
+date: "2024-12-07"
+output: html_document
+---
+3. Concurrent Diagnoses:
+What is the proportion of concurrent HIV/AIDS diagnoses among total HIV diagnoses, and how does this vary by neighborhood and demographic group?
+
+```{r}
+# load the package
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(RColorBrewer)
+
+# import dataset
+Merged_HIV_UHF_Data <- read.csv("Merged_HIV_UHF_Data.csv")
+```
+
+
+
+```{r}
+# create summary data for concurrent HIV/AIDS diagnosis
+summary_data <- Merged_HIV_UHF_Data %>%
+  group_by(uhf_label, sex, race_ethnicity) %>%
+  summarize(
+    total_concurrent_hiv_aids = sum(total_number_of_concurrent_hiv_aids_diagnoses, na.rm = TRUE),
+    total_hiv_diagnoses = sum(total_number_of_hiv_diagnoses, na.rm = TRUE),
+    proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
+  ) %>%
+  arrange(desc(proportion_concurrent))
+```
+
+```{r}
+# Fit the linear regression model
+lm_model <- lm(proportion_concurrent ~ uhf_label + sex + race_ethnicity, data = summary_data)
+
+# Summary of the linear regression model
+summary(lm_model)
+```
+
+[Model Discussion]
+The model explains a small proportion of the variability in the data (R-squared = 0.04472), suggesting that other unmeasured factors may play a more significant role. While the model is statistically significant overall (p = 0.001198), the limited explanatory power highlights the need for additional data or variables to better understand disparities in concurrent diagnoses. These findings suggest that, while neighborhood and most demographic factors do not show strong effects, the elevated proportion observed in the "Other/Unknown" group warrants further investigation into potential disparities in healthcare access or reporting.
+
+
+```{r}
+coeff_table <- summary(lm_model)$coefficients
+coeff_table <- as.data.frame(coeff_table)
+colnames(coeff_table) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+# Add significance levels
+coeff_table$Significance <- cut(coeff_table$`Pr(>|t|)`, 
+                                breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                                labels = c("***", "**", "*", ".", " "))
+
+# View the coefficient table
+print(coeff_table)
+```
+
+```{r}
+ggplot(summary_data, aes(x = uhf_label, y = proportion_concurrent, color = race_ethnicity)) +
+  geom_point(size = 2, alpha = 0.8) +  # Keep points for visibility
+  facet_wrap(~ sex, scales = "free_y") +  # Separate panels for each sex
+  labs(
+    title = "Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood and Demographics",
+    x = "Neighborhood (UHF Label)",
+    y = "Proportion of Concurrent Diagnoses",
+    color = "Race/Ethnicity"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, size = 14),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  ) +
+  scale_color_brewer(palette = "Set1")
+```
+
+[Pattern Discussion]
+
+By Sex:
+
+In the "Female" and "Male" categories, the distribution of concurrent diagnoses appears similar in variation but may differ slightly in range and clustering.
+Men exhibit a slightly broader range in some neighborhoods compared to women.
+
+By Race/Ethnicity:
+
+Black and Latino/Hispanic populations have higher proportions of concurrent diagnoses in several neighborhoods compared to White or Asian/Pacific Islander populations.
+Other/Unknown groups show wide variability, likely influenced by limited data or inconsistent categorization.
+Certain racial/ethnic groups (e.g., White or Asian/Pacific Islander) appear clustered at lower proportions in many neighborhoods.
+
+
+```{r}
+# neighborhood summary
+neighborhood_summary <- Merged_HIV_UHF_Data %>%
+  group_by(neighborhood_u_h_f) %>%
+  summarize(
+    total_concurrent_hiv_aids = sum(total_number_of_concurrent_hiv_aids_diagnoses, na.rm = TRUE),
+    total_hiv_diagnoses = sum(total_number_of_hiv_diagnoses, na.rm = TRUE),
+    proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
+  ) %>%
+  arrange(desc(proportion_concurrent))
+
+print(neighborhood_summary)
+```
+
+```{r}
+# visualization of Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood
+ggplot(neighborhood_summary, aes(x = reorder(neighborhood_u_h_f, -proportion_concurrent), y = proportion_concurrent)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +  
+  labs(
+    title = "Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood",
+    x = "Neighborhood",
+    y = "Proportion of Concurrent Diagnoses"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 14)
+  )
+```
+
+[Pattern Discussion]
+The neighborhoods are ranked by their proportions, with Greenwich Village-Downtown having the lowest proportion and Sheepshead Bay the highest. The visualization highlights geographic variability in concurrent diagnoses, suggesting that certain neighborhoods may face distinct challenges in early detection or healthcare access.
