@@ -11,6 +11,7 @@
 
 <meta name="author" content="Tong Su, Shike Zhang" />
 
+<meta name="date" content="2024-12-05" />
 
 <title>Exploratory Data Analysis</title>
 
@@ -361,11 +362,11 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exploratory Data Analysis</h1>
 <h4 class="author">Tong Su, Shike Zhang</h4>
+<h4 class="date">2024-12-05</h4>
 
 </div>
 
 
-<hr />
 <div id="data-import-and-cleaning" class="section level2">
 <h2>Data Import and Cleaning</h2>
 <pre class="r"><code># Import the HIV and UHF datasets
@@ -401,7 +402,6 @@ HIV_cleaned_df = HIV_df |&gt;
 # Merge datasets
 HIV_UHF_df = HIV_cleaned_df |&gt;
   inner_join(UHF_df, by = c(&quot;borough&quot;, &quot;neighborhood_u_h_f&quot; = &quot;uhf_neighborhood&quot;))</code></pre>
-<hr />
 <div id="data-dictionary" class="section level3">
 <h3>Data Dictionary</h3>
 <ul>
@@ -422,7 +422,6 @@ diagnoses.</p></li>
 <li><p>AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses
 normalized by population.</p></li>
 </ul>
-<hr />
 </div>
 <div id="data-summary" class="section level3">
 <h3>Data Summary</h3>
@@ -643,14 +642,12 @@ align="left">proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses
 </table>
 </div>
 </div>
-<div id="eda" class="section level2">
-<h2>EDA</h2>
-<hr />
-<div id="temporal-trends" class="section level3">
-<h3>Temporal trends</h3>
-<hr />
-<div id="temporal-trends-of-hiv-diagnoses" class="section level4">
-<h4>Temporal trends of HIV diagnoses</h4>
+<div id="eda" class="section level1">
+<h1>EDA</h1>
+<div id="temporal-trends" class="section level2">
+<h2>Temporal trends</h2>
+<div id="temporal-trends-of-hiv-diagnoses" class="section level3">
+<h3>Temporal trends of HIV diagnoses</h3>
 <pre class="r"><code># Group by Borough and Year and calculate average HIV diagnosis rates
 avg_hiv = HIV_UHF_df |&gt;
   group_by(borough, year) |&gt;
@@ -688,16 +685,27 @@ ggplot(avg_hiv, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
     legend.position = &quot;bottom&quot;
   )</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
-<hr />
+<ul>
+<li>The Bronx consistently has the highest HIV diagnosis rates, with a
+decline between 2016 and 2018 followed by a rebound that peaked in 2021,
+likely driven by socio-economic challenges and healthcare access issues.
+In contrast, Staten Island has the lowest rates, with a sharp decline
+from 2016 to 2017 before stabilizing, suggesting effective interventions
+or a smaller population base. While most boroughs show declining or
+stabilizing trends, the Bronx’s increasing rates underscore significant
+disparities and the urgent need for targeted, borough-specific
+strategies.</li>
+</ul>
 </div>
-<div id="temporal-trends-of-aid-diagnoses" class="section level4">
-<h4>Temporal trends of AID diagnoses</h4>
+<div id="temporal-trends-of-aid-diagnoses" class="section level3">
+<h3>Temporal trends of AID diagnoses</h3>
 <pre class="r"><code># Group by Borough and Year and calculate average AIDS diagnosis rates
 avg_aids = HIV_UHF_df |&gt;
   group_by(borough, year) |&gt;
-  summarise(Avg_AIDS_Rate = mean(aids_diagnoses_per_100_000_population, na.rm = TRUE))
-
-avg_aids</code></pre>
+  summarise(Avg_AIDS_Rate = mean(aids_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>avg_aids</code></pre>
 <pre><code>## # A tibble: 30 × 3
 ## # Groups:   borough [5]
 ##    borough   year Avg_AIDS_Rate
@@ -724,21 +732,35 @@ ggplot(avg_aids, aes(x = year, y = Avg_AIDS_Rate, color = borough, group = borou
     color = &quot;Borough&quot;
   ) +
   theme_minimal()</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
-<hr />
+<ul>
+<li>The Bronx experienced a dramatic spike in HIV diagnoses in 2021,
+reversing a declining trend from 2016 to 2019. This sharp increase
+suggests systemic issues such as delayed diagnoses, treatment
+interruptions, or lack of timely access to antiretroviral therapy (ART).
+In contrast, Staten Island’s HIV diagnosis rates remain consistently
+low, similar to Queens, with only a slight increase from 2020 to 2021,
+warranting further investigation despite remaining well below rates in
+the Bronx and Manhattan.</li>
+</ul>
 </div>
 </div>
-<div id="demographic-disparities" class="section level3">
-<h3>Demographic Disparities</h3>
-<hr />
-<div id="hiv-diagnoses-by-sex-and-raceethnicity" class="section level4">
-<h4>HIV Diagnoses by Sex and Race/Ethnicity</h4>
+<div id="demographic-disparities" class="section level2">
+<h2>Demographic Disparities</h2>
+<div id="hiv-diagnoses-by-sex-and-raceethnicity" class="section level3">
+<h3>HIV Diagnoses by Sex and Race/Ethnicity</h3>
 <pre class="r"><code># Group by Sex and Ethnicity with average rate of HIV
 avghiv_sex_ethinicity = HIV_UHF_df |&gt;
   group_by(borough, year,sex,race_ethnicity) |&gt;
-  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))
-
-avghiv_sex_ethinicity</code></pre>
+  summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;, &#39;sex&#39;. You can override
+## using the `.groups` argument.</code></pre>
+<pre class="r"><code>avghiv_sex_ethinicity</code></pre>
 <pre><code>## # A tibble: 540 × 5
 ## # Groups:   borough, year, sex [90]
 ##    borough  year sex    race_ethnicity            Avg_HIV_Rate
@@ -765,22 +787,34 @@ ggplot(avghiv_sex_ethinicity, aes(x = sex, y = Avg_HIV_Rate, fill = race_ethnici
   ) +
   theme_minimal()</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
-<hr />
+<ul>
+<li>Black populations have the highest HIV diagnosis rates, followed by
+Latino/Hispanic populations, while Asian/Pacific Islander and White
+groups consistently show the lowest rates, highlighting stark racial
+disparities. Males across all racial/ethnic groups have higher diagnosis
+rates than females, particularly Black and Latino/Hispanic males, who
+show significant outliers, indicating areas requiring focused
+interventions. Although females have lower overall rates, Black females
+face notable disparities compared to other groups. These patterns
+underscore systemic inequities in access to prevention, testing, and
+treatment, with Black and Latino/Hispanic populations requiring
+prioritized healthcare services and interventions.</li>
+</ul>
 </div>
 </div>
-<div id="concurrent-diagnoses" class="section level3">
-<h3>Concurrent Diagnoses</h3>
-<hr />
+<div id="concurrent-diagnoses" class="section level2">
+<h2>Concurrent Diagnoses</h2>
 <div id="proportion-of-concurrent-diagnoses-by-neighborhood"
-class="section level4">
-<h4>Proportion of concurrent diagnoses by neighborhood</h4>
+class="section level3">
+<h3>Proportion of concurrent diagnoses by neighborhood</h3>
 <pre class="r"><code># Group by proportion of concurrent diagnoses by neighborhood
 proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
   group_by(borough, year,neighborhood_u_h_f) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
-            )
-
-proprotion_diagnoses_neighborhood</code></pre>
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_neighborhood</code></pre>
 <pre><code>## # A tibble: 210 × 4
 ## # Groups:   borough, year [30]
 ##    borough   year neighborhood_u_h_f                    Avg_proportion_Rate
@@ -805,19 +839,35 @@ proprotion_diagnoses_neighborhood</code></pre>
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
-<hr />
+<ul>
+<li>Within the same borough, concurrent HIV/AIDS diagnosis rates vary
+widely across neighborhoods, with certain areas in Brooklyn (e.g.,
+Bedford-Stuyvesant) and Manhattan (e.g., Greenwich Village, Chelsea)
+showing exceptionally high rates, often exceeding 150%, while Staten
+Island and Queens maintain lower percentages. These outliers in Brooklyn
+and Manhattan suggest structural challenges related to healthcare
+access, awareness, or socio-economic factors. Community-level
+disparities emphasize the role of localized healthcare infrastructure
+and socio-economic conditions. The high rate of concurrent diagnoses
+reflects late HIV detection, often when patients have progressed to
+AIDS, highlighting an urgent need for earlier testing and intervention
+efforts.</li>
+</ul>
 </div>
 <div id="proportion-of-concurrent-diagnoses-by-sex"
-class="section level4">
-<h4>Proportion of Concurrent Diagnoses by Sex</h4>
+class="section level3">
+<h3>Proportion of Concurrent Diagnoses by Sex</h3>
 <pre class="r"><code># Group by proportion of concurrent diagnoses by borough and sex with average rate of HIV
 proprotion_diagnoses_sex = HIV_UHF_df |&gt;
   group_by(borough, year,sex) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
-            )
-
-proprotion_diagnoses_sex</code></pre>
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_sex</code></pre>
 <pre><code>## # A tibble: 90 × 4
 ## # Groups:   borough, year [30]
 ##    borough  year sex    Avg_proportion_Rate
@@ -844,18 +894,30 @@ ggplot(proprotion_diagnoses_sex, aes(x = borough, y = as.numeric(Avg_proportion_
   ) +
   theme_minimal()</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
-<hr />
+<ul>
+<li>The proportion of concurrent diagnoses varies widely across
+boroughs, with Staten Island having the highest overall rate,
+particularly among females, which stands out as a significant outlier
+warranting further investigation. Queens also shows a relatively high
+proportion among females, while other boroughs display a more balanced
+distribution. The Bronx, despite its high HIV prevalence, demonstrates
+relatively balanced proportions, suggesting effective early detection
+and treatment efforts. Most boroughs exhibit higher rates among males,
+aligning with data on delayed diagnoses among men, especially men who
+have sex with men (MSM).</li>
+</ul>
 </div>
 <div id="proportion-of-concurrent-diagnoses-by-raceethnicity"
-class="section level4">
-<h4>Proportion of Concurrent Diagnoses by Race/Ethnicity</h4>
+class="section level3">
+<h3>Proportion of Concurrent Diagnoses by Race/Ethnicity</h3>
 <pre class="r"><code># Group by proportion of concurrent diagnoses by borough and ethnicity with average rate of HIV
 proprotion_diagnoses_race = HIV_UHF_df |&gt;
   group_by(borough, year,race_ethnicity) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
-            )
-
-proprotion_diagnoses_race</code></pre>
+            )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>proprotion_diagnoses_race</code></pre>
 <pre><code>## # A tibble: 180 × 4
 ## # Groups:   borough, year [30]
 ##    borough  year race_ethnicity            Avg_proportion_Rate
@@ -882,7 +944,22 @@ ggplot(proprotion_diagnoses_race, aes(x = race_ethnicity, y = as.numeric(Avg_pro
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<pre><code>## Warning: Removed 15 rows containing missing values or values outside the scale range
+## (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
+<ul>
+<li>Asian/Pacific Islanders in the Bronx have the highest rates of
+concurrent diagnoses, surpassing all other racial/ethnic groups across
+boroughs. Staten Island also exhibits very high rates among Whites and
+the Other/Unknown category, with similar trends in Queens. Black and
+Latino/Hispanic populations show consistent proportions across boroughs
+but remain highest in the Bronx. Brooklyn and Queens have notably lower
+percentages of Asian/Pacific Islanders compared to the Bronx. High rates
+in specific groups in the Bronx and Staten Island likely reflect delayed
+diagnoses or systemic barriers such as limited access to care, stigma,
+or socioeconomic challenges. Overrepresentation of Other/Unknown racial
+groups suggests potential data limitations or gaps.</li>
+</ul>
 </div>
 </div>
 </div>
