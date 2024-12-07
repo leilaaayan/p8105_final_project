@@ -184,6 +184,8 @@ ggplot(avg_aids, aes(x = year, y = Avg_AIDS_Rate, color = borough, group = borou
 
 ```
 
+---------------------------------
+
 ### Demographic Disparities
 
 ---------------------------------
@@ -212,6 +214,8 @@ ggplot(avghiv_sex_ethinicity, aes(x = sex, y = Avg_HIV_Rate, fill = race_ethnici
   theme_minimal()
 
 ```
+
+---------------------------------
 
 ### Concurrent Diagnoses
 
