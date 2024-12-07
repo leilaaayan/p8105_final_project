@@ -1,21 +1,25 @@
 ---
-title: "DA"
-author: "Alice Mao"
-date: "2024-12-05"
-output: github_document
+title: "Data Analysis"
+author: "Alice Mao, Leila Yan"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: 
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Load required libraries
 library(tidyverse)
 library(ggplot2)
 library(broom)
-```
-```{r}
+
 # Load the dataset
 hiv_data <- read.csv("data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv")
 
@@ -23,9 +27,13 @@ UHF <- read.csv("data/UHF_Neighborhoods.csv")
 
 ```
 
+---------------------------------
 
-# Q1: How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
-```{r}
+## How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
+
+---------------------------------
+
+```{r, include=FALSE}
 # Clean and prepare the dataset
 hiv_data <- hiv_data %>%
   mutate(
@@ -38,8 +46,7 @@ hiv_data <- hiv_data %>%
 
 ```
 
-
-```{r}
+```{r, message=FALSE}
 # Aggregate HIV and AIDS diagnoses
 hiv_trends <- hiv_data %>%
   group_by(YEAR, Neighborhood) %>%
@@ -53,7 +60,7 @@ hiv_trends <- hiv_data %>%
 head(hiv_trends)
 ```
 
-```{r}
+```{r, message=FALSE}
 # Plot HIV diagnosis trends by neighborhood with a legend
 ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
@@ -73,7 +80,7 @@ ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color =
 
 ```
 
-```{r}
+```{r, message=FALSE}
 # Calculate the mean HIV diagnosis rate for each neighborhood
 top_neighborhoods <- hiv_data %>%
   group_by(Neighborhood) %>%
@@ -116,8 +123,7 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
 
 ```
 
-
-```{r}
+```{r, message=FALSE}
 # Plot AIDS diagnosis trends by neighborhood with a legend
 ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
@@ -185,8 +191,6 @@ ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood
 
 ```
 
-
-
 ```{r}
 # Fit a linear regression model for year predicting HIV diagnosis rates
 hiv_lm <- lm(avg_hiv_rate ~ YEAR, data = hiv_trends)
@@ -213,7 +217,6 @@ high_hiv_neighborhoods %>%
 
 ```
 
-
 ```{r}
 
 tidy(hiv_lm) %>%
@@ -223,12 +226,17 @@ tidy(hiv_lm) %>%
 
 ```
 
-Conclusion: 
+---------------------------------
+
+#### Conclusion
 
 The analysis of temporal trends in HIV diagnoses demonstrates a significant downward trend in diagnosis rates from 2016 onward. The linear regression model revealed a slope of -1.982, indicating an average annual decrease of approximately 1.98 HIV diagnoses per 100,000 population. The p-value for the `YEAR` variable was lower than 0.05, indicating a statistically significant evidence against the null hypothesis and confirming that the observed trend is not due to random variation. However, neighborhood-level disparities remain a significant concern. Analysis of outlier neighborhoods highlighted that certain areas consistently reported significantly higher HIV diagnosis rates.
 
+---------------------------------
 
-# Q2: 
+## Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
+
+---------------------------------
 
 ```{r}
 # Group by sex and calculate average HIV diagnoses
@@ -303,25 +311,12 @@ tidy(hiv_multivariate_lm) %>%
 
 ```
 
-Conclusion: 
+---------------------------------
+
+#### Conclusion
 
 The analysis of demographic disparities in HIV diagnoses revealed significant differences across sex and race/ethnicity. The linear regression model identified males as having significantly higher HIV diagnosis rates than females, with a coefficient of 16.771 for `SEXMale`. The p-value for this variable was lower than 0.05, providing strong statistical evidence that sex is a significant predictor of HIV diagnoses.
 
 Race and ethnicity were also found to be highly significant predictors. The coefficients for `RACE.ETHNICITYBlack` (33.035) and `RACE.ETHNICITYLatino/Hispanic` (6.513) highlight disproportionately high HIV diagnosis rates among Black and Hispanic populations. The near-zero p-values for these predictors confirm that the observed disparities are not due to random variation. These findings align with existing evidence that systemic inequities, including barriers to healthcare access, economic instability, and stigma, disproportionately affect these groups.
 
 The multivariate regression model, adjusting for confounders such as year and neighborhood, confirmed the robustness of these disparities. Even after controlling for these factors, the p-values for sex and race/ethnicity remained small, showing that these disparities are deeply rooted in structural and systemic inequities rather than purely geographic or temporal differences.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,5 @@
 ---
 title: "HIV by Neighborhood and Ethnicity"
-author: "Shumei Liu, Alice Mao, Tong Su, Shike Zhang, Leila Ya"
 output: 
   html_document:
     toc: true

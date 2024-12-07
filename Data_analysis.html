@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Alice Mao, Leila Yan" />
+
+
+<title>Data Analysis</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Exploratory_data_analysis.html">Exploratory Data Analysis</a>
+</li>
+<li>
+  <a href="Data_analysis.html">Data Analysis</a>
+</li>
+<li>
+  <a href="report.html">Project Report</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About The Team</a>
+</li>
+<li>
+  <a href="mailto:&lt;you@youremail.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/leilaaayan/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data Analysis</h1>
+<h4 class="author">Alice Mao, Leila Yan</h4>
+
+</div>
+
+
+<hr />
+<div
+id="how-have-hiv-and-aids-diagnoses-changed-over-time-and-do-specific-neighborhoods-experience-disproportionately-high-rates"
+class="section level2">
+<h2>How have HIV and AIDS diagnoses changed over time, and do specific
+neighborhoods experience disproportionately high rates?</h2>
+<hr />
+<pre class="r"><code># Aggregate HIV and AIDS diagnoses
+hiv_trends &lt;- hiv_data %&gt;%
+  group_by(YEAR, Neighborhood) %&gt;%
+  summarise(
+    avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE),
+    avg_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)
+  ) %&gt;%
+  ungroup()
+
+# Preview the aggregated data
+head(hiv_trends)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##    YEAR Neighborhood                          avg_hiv_rate avg_aids_rate
+##   &lt;dbl&gt; &lt;chr&gt;                                        &lt;dbl&gt;         &lt;dbl&gt;
+## 1  2016 &quot;All&quot;                                        29.1          16.2 
+## 2  2016 &quot;Bayside - Little Neck&quot;                       2.99          2.23
+## 3  2016 &quot;Bedford Stuyvesant -\nCrown Heights&quot;        62.3          23.5 
+## 4  2016 &quot;Bensonhurst - Bay\nRidge&quot;                   14.4           8.93
+## 5  2016 &quot;Borough Park&quot;                                9.97          7.41
+## 6  2016 &quot;Canarsie - Flatlands&quot;                       13.4           5.38</code></pre>
+<pre class="r"><code># Plot HIV diagnosis trends by neighborhood with a legend
+ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  labs(
+    title = &quot;Temporal Trends in HIV Diagnoses by Neighborhood (2016 Onwards)&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
+    color = &quot;Neighborhood&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = &quot;right&quot;, # Display the legend on the right
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code># Calculate the mean HIV diagnosis rate for each neighborhood
+top_neighborhoods &lt;- hiv_data %&gt;%
+  group_by(Neighborhood) %&gt;%
+  summarise(mean_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %&gt;%
+  arrange(desc(mean_hiv_rate)) %&gt;%
+  slice(1:10) %&gt;%
+  pull(Neighborhood)
+
+# Filter the dataset for the top 10 neighborhoods
+filtered_hiv_data &lt;- hiv_data %&gt;%
+  filter(Neighborhood %in% top_neighborhoods)
+
+# Aggregate HIV diagnoses for the top 10 neighborhoods
+top_hiv_trends &lt;- filtered_hiv_data %&gt;%
+  group_by(YEAR, Neighborhood) %&gt;%
+  summarise(
+    avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)
+  ) %&gt;%
+  ungroup()
+
+# Preview the aggregated data
+head(top_hiv_trends)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##    YEAR Neighborhood                            avg_hiv_rate
+##   &lt;dbl&gt; &lt;chr&gt;                                          &lt;dbl&gt;
+## 1  2016 &quot;Bedford Stuyvesant -\nCrown Heights&quot;           62.3
+## 2  2016 &quot;Central Harlem -\nMorningside Heights&quot;         49.1
+## 3  2016 &quot;Chelsea - Clinton&quot;                             66.0
+## 4  2016 &quot;Crotona - Tremont&quot;                             44.3
+## 5  2016 &quot;East Harlem&quot;                                   55.5
+## 6  2016 &quot;East New York&quot;                                 45.5</code></pre>
+<pre class="r"><code># Plot HIV diagnosis trends for the top 10 neighborhoods
+ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 1.2) +
+  labs(
+    title = &quot;Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods (2016 Onwards)&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
+    color = &quot;Neighborhood&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = &quot;right&quot;,
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 12),
+    plot.title = element_text(hjust = 0.5, size = 14)
+  )</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code># Plot AIDS diagnosis trends by neighborhood with a legend
+ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  labs(
+    title = &quot;Temporal Trends in AIDS Diagnoses by Neighborhood (2016 Onwards)&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average AIDS Diagnoses per 100,000 Population&quot;,
+    color = &quot;Neighborhood&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = &quot;right&quot;, # Display the legend on the right
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code># Calculate mean rates for each neighborhood
+top_hiv_neighborhoods &lt;- hiv_data %&gt;%
+  group_by(Neighborhood) %&gt;%
+  summarise(mean_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %&gt;%
+  arrange(desc(mean_hiv_rate)) %&gt;%
+  slice(1:10) %&gt;%
+  pull(Neighborhood)
+
+top_aids_neighborhoods &lt;- hiv_data %&gt;%
+  group_by(Neighborhood) %&gt;%
+  summarise(mean_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)) %&gt;%
+  arrange(desc(mean_aids_rate)) %&gt;%
+  slice(1:10) %&gt;%
+  pull(Neighborhood)
+
+# Filter the dataset for top 10 neighborhoods
+filtered_hiv_trends &lt;- hiv_data %&gt;%
+  filter(Neighborhood %in% top_hiv_neighborhoods) %&gt;%
+  group_by(YEAR, Neighborhood) %&gt;%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %&gt;%
+  ungroup()
+
+filtered_aids_trends &lt;- hiv_data %&gt;%
+  filter(Neighborhood %in% top_aids_neighborhoods) %&gt;%
+  group_by(YEAR, Neighborhood) %&gt;%
+  summarise(avg_aids_rate = mean(AIDS_Diagnoses, na.rm = TRUE)) %&gt;%
+  ungroup()
+
+# Plot HIV diagnosis trends
+ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
+  geom_line(size = 1) +
+  labs(
+    title = &quot;Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods, 2016 Onwards)&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
+    color = &quot;Neighborhood&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = &quot;right&quot;, # Display legend
+    plot.title = element_text(hjust = 0.5),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 10)
+  )</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code># Fit a linear regression model for year predicting HIV diagnosis rates
+hiv_lm &lt;- lm(avg_hiv_rate ~ YEAR, data = hiv_trends)
+
+# Summarize the regression model
+hiv_lm_summary &lt;- summary(hiv_lm)
+
+# Display regression coefficients
+tidy(hiv_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4025.661917</td>
+<td align="right">1090.0683353</td>
+<td align="left">2.708677e-04</td>
+</tr>
+<tr class="even">
+<td align="left">YEAR</td>
+<td align="right">-1.982152</td>
+<td align="right">0.5400386</td>
+<td align="left">2.947053e-04</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Identify neighborhoods with consistently high HIV diagnosis rates
+high_hiv_neighborhoods &lt;- hiv_trends %&gt;%
+  group_by(Neighborhood) %&gt;%
+  summarise(mean_hiv_rate = mean(avg_hiv_rate, na.rm = TRUE)) %&gt;%
+  arrange(desc(mean_hiv_rate)) %&gt;%
+  filter(mean_hiv_rate &gt; quantile(mean_hiv_rate, 0.9)) # Top 10% neighborhoods
+
+# Display the neighborhoods with high HIV rates
+high_hiv_neighborhoods %&gt;%
+  knitr::kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Neighborhood</th>
+<th align="right">mean_hiv_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chelsea - Clinton</td>
+<td align="right">60.05</td>
+</tr>
+<tr class="even">
+<td align="left">Greenwich Village -</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">Soho</td>
+<td align="right">48.94</td>
+</tr>
+<tr class="even">
+<td align="left">Hunts Point - Mott</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">Haven</td>
+<td align="right">47.29</td>
+</tr>
+<tr class="even">
+<td align="left">Crotona - Tremont</td>
+<td align="right">43.47</td>
+</tr>
+<tr class="odd">
+<td align="left">Bedford Stuyvesant -</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">Crown Heights</td>
+<td align="right">40.33</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>tidy(hiv_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4025.661917</td>
+<td align="right">1090.0683353</td>
+<td align="left">2.708677e-04</td>
+</tr>
+<tr class="even">
+<td align="left">YEAR</td>
+<td align="right">-1.982152</td>
+<td align="right">0.5400386</td>
+<td align="left">2.947053e-04</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div id="conclusion" class="section level4">
+<h4>Conclusion</h4>
+<p>The analysis of temporal trends in HIV diagnoses demonstrates a
+significant downward trend in diagnosis rates from 2016 onward. The
+linear regression model revealed a slope of -1.982, indicating an
+average annual decrease of approximately 1.98 HIV diagnoses per 100,000
+population. The p-value for the <code>YEAR</code> variable was lower
+than 0.05, indicating a statistically significant evidence against the
+null hypothesis and confirming that the observed trend is not due to
+random variation. However, neighborhood-level disparities remain a
+significant concern. Analysis of outlier neighborhoods highlighted that
+certain areas consistently reported significantly higher HIV diagnosis
+rates.</p>
+<hr />
+</div>
+</div>
+<div
+id="are-there-significant-disparities-in-hivaids-diagnoses-across-sex-and-raceethnicity"
+class="section level2">
+<h2>Are there significant disparities in HIV/AIDS diagnoses across sex
+and race/ethnicity?</h2>
+<hr />
+<pre class="r"><code># Group by sex and calculate average HIV diagnoses
+hiv_by_sex &lt;- hiv_data %&gt;%
+  group_by(SEX) %&gt;%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %&gt;%
+  arrange(desc(avg_hiv_rate))
+
+# Group by race/ethnicity and calculate average HIV diagnoses
+hiv_by_race &lt;- hiv_data %&gt;%
+  group_by(RACE.ETHNICITY) %&gt;%
+  summarise(avg_hiv_rate = mean(HIV_Diagnoses, na.rm = TRUE)) %&gt;%
+  arrange(desc(avg_hiv_rate))
+
+# Display the summaries
+hiv_by_sex %&gt;%
+  knitr::kable(digits = 2, caption = &quot;Average HIV Diagnosis Rates by Sex&quot;)</code></pre>
+<table>
+<caption>Average HIV Diagnosis Rates by Sex</caption>
+<thead>
+<tr class="header">
+<th align="left">SEX</th>
+<th align="right">avg_hiv_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="right">40.07</td>
+</tr>
+<tr class="even">
+<td align="left">All</td>
+<td align="right">23.29</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="right">7.62</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>hiv_by_race %&gt;%
+  knitr::kable(digits = 2, caption = &quot;Average HIV Diagnosis Rates by Race/Ethnicity&quot;)</code></pre>
+<table>
+<caption>Average HIV Diagnosis Rates by Race/Ethnicity</caption>
+<thead>
+<tr class="header">
+<th align="left">RACE.ETHNICITY</th>
+<th align="right">avg_hiv_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="right">54.93</td>
+</tr>
+<tr class="even">
+<td align="left">Latino/Hispanic</td>
+<td align="right">28.41</td>
+</tr>
+<tr class="odd">
+<td align="left">All</td>
+<td align="right">21.89</td>
+</tr>
+<tr class="even">
+<td align="left">Other/Unknown</td>
+<td align="right">14.97</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">12.28</td>
+</tr>
+<tr class="even">
+<td align="left">Asian/Pacific</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">Islander</td>
+<td align="right">9.30</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Bar plot for HIV diagnosis rates by sex
+ggplot(hiv_by_sex, aes(x = SEX, y = avg_hiv_rate, fill = SEX)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    title = &quot;HIV Diagnosis Rates by Sex&quot;,
+    x = &quot;Sex&quot;,
+    y = &quot;Average HIV Diagnoses per 100,000 Population&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code># Bar plot for HIV diagnosis rates by race/ethnicity
+ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_rate, fill = RACE.ETHNICITY)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  coord_flip() + # Flip for better readability
+  labs(
+    title = &quot;HIV Diagnosis Rates by Race/Ethnicity&quot;,
+    x = &quot;Race/Ethnicity&quot;,
+    y = &quot;Average HIV Diagnoses per 100,000 Population&quot;
+  ) +
+  theme_minimal() +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre class="r"><code># Fit a linear regression model for HIV diagnosis rates
+hiv_lm &lt;- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
+
+# Summarize the regression model
+hiv_lm_summary &lt;- summary(hiv_lm)
+
+# Display regression coefficients
+tidy(hiv_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%
+  knitr::kable(digits = 3, caption = &quot;Linear Regression: Predicting HIV Diagnoses&quot;)</code></pre>
+<table>
+<caption>Linear Regression: Predicting HIV Diagnoses</caption>
+<colgroup>
+<col width="52%" />
+<col width="13%" />
+<col width="14%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">21.537</td>
+<td align="right">1.129</td>
+<td align="left">7.275877e-79</td>
+</tr>
+<tr class="even">
+<td align="left">SEXFemale</td>
+<td align="right">-15.674</td>
+<td align="right">0.977</td>
+<td align="left">1.064319e-56</td>
+</tr>
+<tr class="odd">
+<td align="left">SEXMale</td>
+<td align="right">16.746</td>
+<td align="right">0.978</td>
+<td align="left">3.474420e-64</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYAsian/Pacific</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Islander</td>
+<td align="right">-12.565</td>
+<td align="right">1.383</td>
+<td align="left">1.364801e-19</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYBlack</td>
+<td align="right">33.035</td>
+<td align="right">1.382</td>
+<td align="left">1.065960e-120</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYLatino/Hispanic</td>
+<td align="right">6.513</td>
+<td align="right">1.382</td>
+<td align="left">2.506124e-06</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYOther/Unknown</td>
+<td align="right">-6.854</td>
+<td align="right">1.384</td>
+<td align="left">7.514098e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYWhite</td>
+<td align="right">-9.611</td>
+<td align="right">1.382</td>
+<td align="left">3.951311e-12</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Fit a multivariate regression model adjusting for year and neighborhood
+hiv_multivariate_lm &lt;- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY + YEAR + Neighborhood..U.H.F., data = hiv_data)
+
+# Summarize the multivariate regression model
+tidy(hiv_multivariate_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%
+  knitr::kable(digits = 10, caption = &quot;Multivariate Regression: Adjusting for Confounders&quot;)</code></pre>
+<table>
+<caption>Multivariate Regression: Adjusting for Confounders</caption>
+<colgroup>
+<col width="58%" />
+<col width="14%" />
+<col width="12%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4432.71461404</td>
+<td align="right">449.3360454</td>
+<td align="left">8.795901e-23</td>
+</tr>
+<tr class="even">
+<td align="left">SEXFemale</td>
+<td align="right">-15.68201860</td>
+<td align="right">0.9077399</td>
+<td align="left">2.675863e-65</td>
+</tr>
+<tr class="odd">
+<td align="left">SEXMale</td>
+<td align="right">16.77128266</td>
+<td align="right">0.9084285</td>
+<td align="left">4.601996e-74</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYAsian/Pacific</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Islander</td>
+<td align="right">-12.53216867</td>
+<td align="right">1.2842262</td>
+<td align="left">2.485694e-22</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYBlack</td>
+<td align="right">33.03541667</td>
+<td align="right">1.2835774</td>
+<td align="left">1.224881e-138</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYLatino/Hispanic</td>
+<td align="right">6.51319444</td>
+<td align="right">1.2835774</td>
+<td align="left">4.007529e-07</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYOther/Unknown</td>
+<td align="right">-6.80542575</td>
+<td align="right">1.2852104</td>
+<td align="left">1.231332e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYWhite</td>
+<td align="right">-9.61061508</td>
+<td align="right">1.2835774</td>
+<td align="left">8.042352e-14</td>
+</tr>
+<tr class="even">
+<td align="left">YEAR</td>
+<td align="right">-2.18592344</td>
+<td align="right">0.2225841</td>
+<td align="left">1.357711e-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Bayside - Little Neck</td>
+<td align="right">-19.20383598</td>
+<td align="right">2.7728440</td>
+<td align="left">4.792543e-12</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Bedford Stuyvesant -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Crown Heights</td>
+<td align="right">16.44298942</td>
+<td align="right">2.7728440</td>
+<td align="left">3.198223e-09</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Bensonhurst - Bay</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Ridge</td>
+<td align="right">-10.85383598</td>
+<td align="right">2.7728440</td>
+<td align="left">9.165992e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Borough Park</td>
+<td align="right">-11.53240741</td>
+<td align="right">2.7728440</td>
+<td align="left">3.240344e-05</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Canarsie - Flatlands</td>
+<td align="right">-7.90859788</td>
+<td align="right">2.7728440</td>
+<td align="left">4.357176e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Central Harlem -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Morningside Heights</td>
+<td align="right">13.92870370</td>
+<td align="right">2.7728440</td>
+<td align="left">5.227528e-07</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Chelsea - Clinton</td>
+<td align="right">37.79933862</td>
+<td align="right">2.7728440</td>
+<td align="left">1.077335e-41</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Coney Island -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Sheepshead Bay</td>
+<td align="right">-8.42843915</td>
+<td align="right">2.7728440</td>
+<td align="left">2.378862e-03</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Crotona - Tremont</td>
+<td align="right">20.02632275</td>
+<td align="right">2.7728440</td>
+<td align="left">5.746986e-13</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Downtown - Heights -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Park Slope</td>
+<td align="right">-5.12208995</td>
+<td align="right">2.7728440</td>
+<td align="left">6.476261e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.East Flatbush -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Flatbush</td>
+<td align="right">7.24298942</td>
+<td align="right">2.7728440</td>
+<td align="left">9.020841e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.East Harlem</td>
+<td align="right">13.86283069</td>
+<td align="right">2.7728440</td>
+<td align="left">5.911480e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.East New York</td>
+<td align="right">13.60568783</td>
+<td align="right">2.7728440</td>
+<td align="left">9.504068e-07</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Flushing - Clearview</td>
+<td align="right">-6.32843915</td>
+<td align="right">2.7728440</td>
+<td align="left">2.250702e-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Fordham - Bronx</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Park</td>
+<td align="right">5.12235450</td>
+<td align="right">2.7728440</td>
+<td align="left">6.474879e-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Fresh Meadows</td>
+<td align="right">-12.24431217</td>
+<td align="right">2.7728440</td>
+<td align="left">1.024087e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Gramercy Park -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Murray Hill</td>
+<td align="right">2.72949735</td>
+<td align="right">2.7728440</td>
+<td align="left">3.249746e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Greenpoint</td>
+<td align="right">-3.84748677</td>
+<td align="right">2.7728440</td>
+<td align="left">1.653228e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Greenwich Village -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Soho</td>
+<td align="right">26.99457672</td>
+<td align="right">2.7728440</td>
+<td align="left">3.112492e-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.High Bridge -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Morrisania</td>
+<td align="right">15.97314815</td>
+<td align="right">2.7728440</td>
+<td align="left">8.800065e-09</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Hunts Point - Mott</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Haven</td>
+<td align="right">22.19158295</td>
+<td align="right">2.8216877</td>
+<td align="left">4.359583e-15</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Jamaica</td>
+<td align="right">-4.85621693</td>
+<td align="right">2.7728440</td>
+<td align="left">7.993703e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Kingsbridge -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Riverdale</td>
+<td align="right">-10.76335979</td>
+<td align="right">2.7728440</td>
+<td align="left">1.048418e-04</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Long Island City -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Astoria</td>
+<td align="right">6.80886243</td>
+<td align="right">2.7728440</td>
+<td align="left">1.409505e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Lower Manhattan</td>
+<td align="right">4.43902116</td>
+<td align="right">2.7728440</td>
+<td align="left">1.094538e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Northeast Bronx</td>
+<td align="right">-6.00304233</td>
+<td align="right">2.7728440</td>
+<td align="left">3.043161e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Pelham - Throgs</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Neck</td>
+<td align="right">0.05886243</td>
+<td align="right">2.7728440</td>
+<td align="left">9.830643e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Port Richmond</td>
+<td align="right">-3.28889912</td>
+<td align="right">2.7919938</td>
+<td align="left">2.388533e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Ridgewood - Forest</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Hills</td>
+<td align="right">3.78822751</td>
+<td align="right">2.7728440</td>
+<td align="left">1.719311e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Rockaway</td>
+<td align="right">-8.49748677</td>
+<td align="right">2.7728440</td>
+<td align="left">2.189761e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.South Beach -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Tottenville</td>
+<td align="right">-3.34589947</td>
+<td align="right">2.7728440</td>
+<td align="left">2.276081e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Southeast Queens</td>
+<td align="right">-10.25383598</td>
+<td align="right">2.7728440</td>
+<td align="left">2.192931e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Southwest Queens</td>
+<td align="right">-6.01574074</td>
+<td align="right">2.7728440</td>
+<td align="left">3.008242e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Stapleton - St.</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">George</td>
+<td align="right">-6.96177249</td>
+<td align="right">2.7728440</td>
+<td align="left">1.207542e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Sunset Park</td>
+<td align="right">2.23743386</td>
+<td align="right">2.7728440</td>
+<td align="left">4.197507e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Union Square -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Lower East Side</td>
+<td align="right">2.01759259</td>
+<td align="right">2.7728440</td>
+<td align="left">4.668712e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Upper East Side</td>
+<td align="right">-4.82526455</td>
+<td align="right">2.7728440</td>
+<td align="left">8.187771e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Upper West Side</td>
+<td align="right">-1.96256614</td>
+<td align="right">2.7728440</td>
+<td align="left">4.791088e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Washington Heights -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Inwood</td>
+<td align="right">12.10171958</td>
+<td align="right">2.7728440</td>
+<td align="left">1.296321e-05</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.West Queens</td>
+<td align="right">-3.03796296</td>
+<td align="right">2.7728440</td>
+<td align="left">2.732924e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Williamsburg -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Bushwick</td>
+<td align="right">10.82473545</td>
+<td align="right">2.7728440</td>
+<td align="left">9.571857e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Willowbrook</td>
+<td align="right">-7.48161376</td>
+<td align="right">2.7728440</td>
+<td align="left">6.991656e-03</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div id="conclusion-1" class="section level4">
+<h4>Conclusion</h4>
+<p>The analysis of demographic disparities in HIV diagnoses revealed
+significant differences across sex and race/ethnicity. The linear
+regression model identified males as having significantly higher HIV
+diagnosis rates than females, with a coefficient of 16.771 for
+<code>SEXMale</code>. The p-value for this variable was lower than 0.05,
+providing strong statistical evidence that sex is a significant
+predictor of HIV diagnoses.</p>
+<p>Race and ethnicity were also found to be highly significant
+predictors. The coefficients for <code>RACE.ETHNICITYBlack</code>
+(33.035) and <code>RACE.ETHNICITYLatino/Hispanic</code> (6.513)
+highlight disproportionately high HIV diagnosis rates among Black and
+Hispanic populations. The near-zero p-values for these predictors
+confirm that the observed disparities are not due to random variation.
+These findings align with existing evidence that systemic inequities,
+including barriers to healthcare access, economic instability, and
+stigma, disproportionately affect these groups.</p>
+<p>The multivariate regression model, adjusting for confounders such as
+year and neighborhood, confirmed the robustness of these disparities.
+Even after controlling for these factors, the p-values for sex and
+race/ethnicity remained small, showing that these disparities are deeply
+rooted in structural and systemic inequities rather than purely
+geographic or temporal differences.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

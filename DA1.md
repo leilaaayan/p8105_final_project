@@ -17,8 +17,7 @@ hiv_data <- read.csv("data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Eth
 UHF <- read.csv("data/UHF_Neighborhoods.csv")
 ```
 
-Q1: How have HIV and AIDS diagnoses changed over time, and do specific
-neighborhoods experience disproportionately high rates?
+# Q1: How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
 
 ``` r
 # Clean and prepare the dataset
@@ -287,7 +286,20 @@ tidy(hiv_lm) %>%
 | (Intercept) | 4025.661917 | 1090.0683353 | 2.708677e-04 |
 | YEAR        |   -1.982152 |    0.5400386 | 2.947053e-04 |
 
-Q2:
+Conclusion:
+
+The analysis of temporal trends in HIV diagnoses demonstrates a
+significant downward trend in diagnosis rates from 2016 onward. The
+linear regression model revealed a slope of -1.982, indicating an
+average annual decrease of approximately 1.98 HIV diagnoses per 100,000
+population. The p-value for the `YEAR` variable was lower than 0.05,
+indicating a statistically significant evidence against the null
+hypothesis and confirming that the observed trend is not due to random
+variation. However, neighborhood-level disparities remain a significant
+concern. Analysis of outlier neighborhoods highlighted that certain
+areas consistently reported significantly higher HIV diagnosis rates.
+
+# Q2:
 
 ``` r
 # Group by sex and calculate average HIV diagnoses
@@ -477,3 +489,30 @@ tidy(hiv_multivariate_lm) %>%
 | Neighborhood..U.H.F.Willowbrook | -7.48161376 | 2.7728440 | 6.991656e-03 |
 
 Multivariate Regression: Adjusting for Confounders
+
+Conclusion:
+
+The analysis of demographic disparities in HIV diagnoses revealed
+significant differences across sex and race/ethnicity. The linear
+regression model identified males as having significantly higher HIV
+diagnosis rates than females, with a coefficient of 16.771 for
+`SEXMale`. The p-value for this variable was lower than 0.05, providing
+strong statistical evidence that sex is a significant predictor of HIV
+diagnoses.
+
+Race and ethnicity were also found to be highly significant predictors.
+The coefficients for `RACE.ETHNICITYBlack` (33.035) and
+`RACE.ETHNICITYLatino/Hispanic` (6.513) highlight disproportionately
+high HIV diagnosis rates among Black and Hispanic populations. The
+near-zero p-values for these predictors confirm that the observed
+disparities are not due to random variation. These findings align with
+existing evidence that systemic inequities, including barriers to
+healthcare access, economic instability, and stigma, disproportionately
+affect these groups.
+
+The multivariate regression model, adjusting for confounders such as
+year and neighborhood, confirmed the robustness of these disparities.
+Even after controlling for these factors, the p-values for sex and
+race/ethnicity remained small, showing that these disparities are deeply
+rooted in structural and systemic inequities rather than purely
+geographic or temporal differences.

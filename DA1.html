@@ -611,8 +611,9 @@ padding-top: 0px;
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>hiv_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>UHF <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/UHF_Neighborhoods.csv&quot;</span>)</span></code></pre></div>
-<p>Q1: How have HIV and AIDS diagnoses changed over time, and do
-specific neighborhoods experience disproportionately high rates?</p>
+<h1 id="q1-how-have-hiv-and-aids-diagnoses-changed-over-time-and-do-specific-neighborhoods-experience-disproportionately-high-rates">Q1:
+How have HIV and AIDS diagnoses changed over time, and do specific
+neighborhoods experience disproportionately high rates?</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Clean and prepare the dataset</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>hiv_data <span class="ot">&lt;-</span> hiv_data <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -896,7 +897,19 @@ specific neighborhoods experience disproportionately high rates?</p>
 </tr>
 </tbody>
 </table>
-<p>Q2:</p>
+<p>Conclusion:</p>
+<p>The analysis of temporal trends in HIV diagnoses demonstrates a
+significant downward trend in diagnosis rates from 2016 onward. The
+linear regression model revealed a slope of -1.982, indicating an
+average annual decrease of approximately 1.98 HIV diagnoses per 100,000
+population. The p-value for the <code>YEAR</code> variable was lower
+than 0.05, indicating a statistically significant evidence against the
+null hypothesis and confirming that the observed trend is not due to
+random variation. However, neighborhood-level disparities remain a
+significant concern. Analysis of outlier neighborhoods highlighted that
+certain areas consistently reported significantly higher HIV diagnosis
+rates.</p>
+<h1 id="q2">Q2:</h1>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Group by sex and calculate average HIV diagnoses</span></span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>hiv_by_sex <span class="ot">&lt;-</span> hiv_data <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="fu">group_by</span>(SEX) <span class="sc">%&gt;%</span></span>
@@ -1529,6 +1542,29 @@ specific neighborhoods experience disproportionately high rates?</p>
 </tbody>
 </table>
 <p>Multivariate Regression: Adjusting for Confounders</p>
+<p>Conclusion:</p>
+<p>The analysis of demographic disparities in HIV diagnoses revealed
+significant differences across sex and race/ethnicity. The linear
+regression model identified males as having significantly higher HIV
+diagnosis rates than females, with a coefficient of 16.771 for
+<code>SEXMale</code>. The p-value for this variable was lower than 0.05,
+providing strong statistical evidence that sex is a significant
+predictor of HIV diagnoses.</p>
+<p>Race and ethnicity were also found to be highly significant
+predictors. The coefficients for <code>RACE.ETHNICITYBlack</code>
+(33.035) and <code>RACE.ETHNICITYLatino/Hispanic</code> (6.513)
+highlight disproportionately high HIV diagnosis rates among Black and
+Hispanic populations. The near-zero p-values for these predictors
+confirm that the observed disparities are not due to random variation.
+These findings align with existing evidence that systemic inequities,
+including barriers to healthcare access, economic instability, and
+stigma, disproportionately affect these groups.</p>
+<p>The multivariate regression model, adjusting for confounders such as
+year and neighborhood, confirmed the robustness of these disparities.
+Even after controlling for these factors, the p-values for sex and
+race/ethnicity remained small, showing that these disparities are deeply
+rooted in structural and systemic inequities rather than purely
+geographic or temporal differences.</p>
 
 </body>
 </html>

@@ -1,7 +1,6 @@
 ---
 title: "Exploratory Data Analysis"
 author: "Tong Su, Shike Zhang"
-date: "2024-12-05"
 output: 
   html_document:
     toc: true
@@ -11,6 +10,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
 ```
 
 ```{r, include=FALSE}
@@ -37,6 +38,8 @@ options(
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
+
+---------------------------------
 
 ## Data Import and Cleaning
 
@@ -76,10 +79,12 @@ HIV_UHF_df = HIV_cleaned_df |>
   inner_join(UHF_df, by = c("borough", "neighborhood_u_h_f" = "uhf_neighborhood"))
 ```
 
-```{r}
+```{r, include=FALSE}
 # Export the merged data
 write.csv(HIV_UHF_df, "Merged_HIV_UHF_Data.csv", row.names = FALSE)
 ```
+
+---------------------------------
 
 ### Data Dictionary
 
@@ -105,13 +110,22 @@ write.csv(HIV_UHF_df, "Merged_HIV_UHF_Data.csv", row.names = FALSE)
 
 * AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses normalized by population.
 
+---------------------------------
+
 ### Data Summary
 
 ```{r, echo=FALSE}
 skimr::skim(HIV_df)
 ```
+
 ## EDA
+
+---------------------------------
+
 ### Temporal trends
+
+---------------------------------
+
 #### Temporal trends of HIV diagnoses
 ```{r, message=FALSE}
 # Group by Borough and Year and calculate average HIV diagnosis rates
@@ -140,7 +154,10 @@ ggplot(avg_hiv, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
   )
 ```
 
+---------------------------------
+
 #### Temporal trends of AID diagnoses
+
 ```{r}
 # Group by Borough and Year and calculate average AIDS diagnosis rates
 avg_aids = HIV_UHF_df |>
@@ -168,7 +185,11 @@ ggplot(avg_aids, aes(x = year, y = Avg_AIDS_Rate, color = borough, group = borou
 ```
 
 ### Demographic Disparities
+
+---------------------------------
+
 #### HIV Diagnoses by Sex and Race/Ethnicity
+
 ```{r}
 # Group by Sex and Ethnicity with average rate of HIV
 avghiv_sex_ethinicity = HIV_UHF_df |>
@@ -193,7 +214,11 @@ ggplot(avghiv_sex_ethinicity, aes(x = sex, y = Avg_HIV_Rate, fill = race_ethnici
 ```
 
 ### Concurrent Diagnoses
+
+---------------------------------
+
 #### Proportion of concurrent diagnoses by neighborhood
+
 ```{r}
 # Group by proportion of concurrent diagnoses by neighborhood
 proprotion_diagnoses_neighborhood = HIV_UHF_df |>
@@ -216,9 +241,9 @@ ggplot(proprotion_diagnoses_neighborhood, aes(x = neighborhood_u_h_f, y = Avg_pr
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))
 ```
 
+---------------------------------
 
-
-#### Proportion of Concurrent Diagnoses by  Sex
+#### Proportion of Concurrent Diagnoses by Sex
 
 ```{r}
 # Group by proportion of concurrent diagnoses by borough and sex with average rate of HIV
@@ -243,6 +268,8 @@ ggplot(proprotion_diagnoses_sex, aes(x = borough, y = as.numeric(Avg_proportion_
 
 ```
 
+---------------------------------
+
 #### Proportion of Concurrent Diagnoses by Race/Ethnicity
 
 ```{r}
@@ -254,7 +281,6 @@ proprotion_diagnoses_race = HIV_UHF_df |>
 
 proprotion_diagnoses_race
 ```
-
 
 ```{r}
 # Concurrent diagnoses by race/ethnicity and borough

@@ -5,8 +5,8 @@ navbar:
   left:
     - text: "Exploratory Data Analysis"
       href: Exploratory_data_analysis.html
-    - text: "Model Analysis"
-      href: model.html
+    - text: "Data Analysis"
+      href: Data_analysis.html
     - text: "Project Report"
       href: report.html
   right:
