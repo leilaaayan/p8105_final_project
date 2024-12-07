@@ -394,21 +394,23 @@ head(hiv_trends)</code></pre>
 ## 4  2016 &quot;Bensonhurst - Bay\nRidge&quot;                   14.4           8.93
 ## 5  2016 &quot;Borough Park&quot;                                9.97          7.41
 ## 6  2016 &quot;Canarsie - Flatlands&quot;                       13.4           5.38</code></pre>
-<pre class="r"><code># Plot HIV diagnosis trends by neighborhood with a legend
+<pre class="r"><code># Plot HIV diagnosis trends by neighborhood
 ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
-  geom_line(size = 0.8, alpha = 0.7) +
+  geom_line(size = 0.5, alpha = 0.6) + 
   labs(
-    title = &quot;Temporal Trends in HIV Diagnoses by Neighborhood (2016 Onwards)&quot;,
+    title = &quot;Temporal Trends in HIV Diagnoses by Neighborhood&quot;,
     x = &quot;Year&quot;,
     y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
     color = &quot;Neighborhood&quot;
   ) +
   theme_minimal() +
   theme(
-    legend.position = &quot;right&quot;, # Display the legend on the right
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = &quot;right&quot;,
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <pre class="r"><code># Calculate the mean HIV diagnosis rate for each neighborhood
@@ -446,7 +448,7 @@ head(top_hiv_trends)</code></pre>
 ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1.2) +
   labs(
-    title = &quot;Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods (2016 Onwards)&quot;,
+    title = &quot;Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods&quot;,
     x = &quot;Year&quot;,
     y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
     color = &quot;Neighborhood&quot;
@@ -454,26 +456,30 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
   theme_minimal() +
   theme(
     legend.position = &quot;right&quot;,
-    legend.text = element_text(size = 10),
-    legend.title = element_text(size = 12),
-    plot.title = element_text(hjust = 0.5, size = 14)
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 <pre class="r"><code># Plot AIDS diagnosis trends by neighborhood with a legend
 ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
   labs(
-    title = &quot;Temporal Trends in AIDS Diagnoses by Neighborhood (2016 Onwards)&quot;,
+    title = &quot;Temporal Trends in AIDS Diagnoses by Neighborhood&quot;,
     x = &quot;Year&quot;,
     y = &quot;Average AIDS Diagnoses per 100,000 Population&quot;,
     color = &quot;Neighborhood&quot;
   ) +
   theme_minimal() +
   theme(
-    legend.position = &quot;right&quot;, # Display the legend on the right
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = &quot;right&quot;,
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 <pre class="r"><code># Calculate mean rates for each neighborhood
@@ -508,17 +514,19 @@ filtered_aids_trends &lt;- hiv_data %&gt;%
 ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1) +
   labs(
-    title = &quot;Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods, 2016 Onwards)&quot;,
+    title = &quot;Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods)&quot;,
     x = &quot;Year&quot;,
     y = &quot;Average HIV Diagnoses per 100,000 Population&quot;,
     color = &quot;Neighborhood&quot;
   ) +
   theme_minimal() +
   theme(
-    legend.position = &quot;right&quot;, # Display legend
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = &quot;right&quot;,
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 <pre class="r"><code># Fit a linear regression model for year predicting HIV diagnosis rates
