@@ -87,7 +87,7 @@ head(hiv_trends)
 ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.5, alpha = 0.6) + 
   labs(
-    title = "Temporal Trends in HIV Diagnoses by Neighborhood",
+    title = "HIV Diagnoses by Neighborhood",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
@@ -133,7 +133,7 @@ head(top_hiv_trends)
 ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1.2) +
   labs(
-    title = "Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods",
+    title = "HIV Diagnoses for Top 10 Neighborhoods",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
@@ -155,7 +155,7 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
 ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
   labs(
-    title = "Temporal Trends in AIDS Diagnoses by Neighborhood",
+    title = "AIDS Diagnoses by Neighborhood",
     x = "Year",
     y = "Average AIDS Diagnoses per 100,000 Population",
     color = "Neighborhood"
@@ -205,7 +205,7 @@ filtered_aids_trends <- hiv_data %>%
 ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1) +
   labs(
-    title = "Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods)",
+    title = "HIV Diagnoses in Top 10 Neighborhoods",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
