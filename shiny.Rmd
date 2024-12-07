@@ -19,7 +19,7 @@ library(leaflet)
 library(sf)
 ```
 
-Column {data-width=1000 .tabset}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### HIV
@@ -89,6 +89,9 @@ leaflet(map_data) %>%
     position = "bottomright"
   )
 ```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
 
 ### AIDS
 
