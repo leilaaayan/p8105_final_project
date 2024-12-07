@@ -405,7 +405,7 @@ ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color =
     legend.text = element_text(size = 8),
     legend.title = element_text(size = 10)
   )</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <pre class="r"><code># Calculate the mean HIV diagnosis rate for each neighborhood
 top_neighborhoods &lt;- hiv_data %&gt;%
   group_by(Neighborhood) %&gt;%
@@ -453,7 +453,7 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
     legend.title = element_text(size = 12),
     plot.title = element_text(hjust = 0.5, size = 14)
   )</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 <pre class="r"><code># Plot AIDS diagnosis trends by neighborhood with a legend
 ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
@@ -470,7 +470,7 @@ ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color 
     legend.text = element_text(size = 8),
     legend.title = element_text(size = 10)
   )</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 <pre class="r"><code># Calculate mean rates for each neighborhood
 top_hiv_neighborhoods &lt;- hiv_data %&gt;%
   group_by(Neighborhood) %&gt;%
@@ -515,7 +515,7 @@ ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood
     legend.text = element_text(size = 8),
     legend.title = element_text(size = 10)
   )</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 <pre class="r"><code># Fit a linear regression model for year predicting HIV diagnosis rates
 hiv_lm &lt;- lm(avg_hiv_rate ~ YEAR, data = hiv_trends)
 
@@ -742,7 +742,7 @@ ggplot(hiv_by_sex, aes(x = SEX, y = avg_hiv_rate, fill = SEX)) +
     y = &quot;Average HIV Diagnoses per 100,000 Population&quot;
   ) +
   theme_minimal()</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
 <pre class="r"><code># Bar plot for HIV diagnosis rates by race/ethnicity
 ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_rate, fill = RACE.ETHNICITY)) +
   geom_bar(stat = &quot;identity&quot;) +
@@ -754,7 +754,7 @@ ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_r
   ) +
   theme_minimal() +
   theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-11-2.png" width="90%" /></p>
 <pre class="r"><code># Fit a linear regression model for HIV diagnosis rates
 hiv_lm &lt;- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
 
@@ -1323,6 +1323,202 @@ Even after controlling for these factors, the p-values for sex and
 race/ethnicity remained small, showing that these disparities are deeply
 rooted in structural and systemic inequities rather than purely
 geographic or temporal differences.</p>
+<hr />
+</div>
+</div>
+<div
+id="what-is-the-proportion-of-concurrent-hivaids-diagnoses-among-total-hiv-diagnoses-and-how-does-this-vary-by-neighborhood-and-demographic-group"
+class="section level2">
+<h2>What is the proportion of concurrent HIV/AIDS diagnoses among total
+HIV diagnoses, and how does this vary by neighborhood and demographic
+group?</h2>
+<hr />
+<pre class="r"><code># create summary data for concurrent HIV/AIDS diagnosis
+summary_data &lt;- Merged_HIV_UHF_Data %&gt;%
+  group_by(uhf_label, sex, race_ethnicity) %&gt;%
+  summarize(
+    total_concurrent_hiv_aids = sum(total_number_of_concurrent_hiv_aids_diagnoses, na.rm = TRUE),
+    total_hiv_diagnoses = sum(total_number_of_hiv_diagnoses, na.rm = TRUE),
+    proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
+  ) %&gt;%
+  arrange(desc(proportion_concurrent))</code></pre>
+<pre class="r"><code># Fit the linear regression model
+lm_model &lt;- lm(proportion_concurrent ~ uhf_label + sex + race_ethnicity, data = summary_data)
+
+# Summary of the linear regression model
+summary(lm_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = proportion_concurrent ~ uhf_label + sex + race_ethnicity, 
+##     data = summary_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.31457 -0.08388 -0.00526  0.05930  0.82539 
+## 
+## Coefficients:
+##                                         Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                            1.624e-01  3.208e-02   5.063 5.61e-07
+## uhf_label                              9.565e-05  7.643e-05   1.251 0.211331
+## sexFemale                              1.650e-02  1.968e-02   0.838 0.402166
+## sexMale                               -9.755e-03  1.850e-02  -0.527 0.598212
+## race_ethnicityAsian/Pacific\nIslander  3.167e-02  2.668e-02   1.187 0.235766
+## race_ethnicityBlack                   -2.906e-02  2.578e-02  -1.127 0.260163
+## race_ethnicityLatino/Hispanic          7.971e-03  2.565e-02   0.311 0.756116
+## race_ethnicityOther/Unknown            1.040e-01  2.967e-02   3.506 0.000491
+## race_ethnicityWhite                   -1.689e-02  2.605e-02  -0.648 0.516952
+##                                          
+## (Intercept)                           ***
+## uhf_label                                
+## sexFemale                                
+## sexMale                                  
+## race_ethnicityAsian/Pacific\nIslander    
+## race_ethnicityBlack                      
+## race_ethnicityLatino/Hispanic            
+## race_ethnicityOther/Unknown           ***
+## race_ethnicityWhite                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1859 on 558 degrees of freedom
+##   (63 observations deleted due to missingness)
+## Multiple R-squared:  0.04472,    Adjusted R-squared:  0.03102 
+## F-statistic: 3.265 on 8 and 558 DF,  p-value: 0.001198</code></pre>
+<hr />
+<div id="model-discussion" class="section level4">
+<h4>Model Discussion</h4>
+<p>The model explains a small proportion of the variability in the data
+(R-squared = 0.04472), suggesting that other unmeasured factors may play
+a more significant role. While the model is statistically significant
+overall (p = 0.001198), the limited explanatory power highlights the
+need for additional data or variables to better understand disparities
+in concurrent diagnoses. These findings suggest that, while neighborhood
+and most demographic factors do not show strong effects, the elevated
+proportion observed in the “Other/Unknown” group warrants further
+investigation into potential disparities in healthcare access or
+reporting.</p>
+<hr />
+<pre class="r"><code>coeff_table &lt;- summary(lm_model)$coefficients
+coeff_table &lt;- as.data.frame(coeff_table)
+colnames(coeff_table) &lt;- c(&quot;Estimate&quot;, &quot;Std. Error&quot;, &quot;t value&quot;, &quot;Pr(&gt;|t|)&quot;)
+
+# Add significance levels
+coeff_table$Significance &lt;- cut(coeff_table$`Pr(&gt;|t|)`, 
+                                breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
+                                labels = c(&quot;***&quot;, &quot;**&quot;, &quot;*&quot;, &quot;.&quot;, &quot; &quot;))
+
+# View the coefficient table
+print(coeff_table)</code></pre>
+<pre><code>##                                            Estimate   Std. Error    t value
+## (Intercept)                            1.624272e-01 3.207920e-02  5.0633198
+## uhf_label                              9.564643e-05 7.643449e-05  1.2513516
+## sexFemale                              1.649985e-02 1.968022e-02  0.8383979
+## sexMale                               -9.754848e-03 1.850047e-02 -0.5272756
+## race_ethnicityAsian/Pacific\nIslander  3.166751e-02 2.668053e-02  1.1869146
+## race_ethnicityBlack                   -2.905533e-02 2.577765e-02 -1.1271521
+## race_ethnicityLatino/Hispanic          7.971156e-03 2.565235e-02  0.3107379
+## race_ethnicityOther/Unknown            1.040319e-01 2.967142e-02  3.5061315
+## race_ethnicityWhite                   -1.689113e-02 2.604795e-02 -0.6484631
+##                                           Pr(&gt;|t|) Significance
+## (Intercept)                           5.605625e-07          ***
+## uhf_label                             2.113306e-01             
+## sexFemale                             4.021663e-01             
+## sexMale                               5.982118e-01             
+## race_ethnicityAsian/Pacific\nIslander 2.357664e-01             
+## race_ethnicityBlack                   2.601627e-01             
+## race_ethnicityLatino/Hispanic         7.561159e-01             
+## race_ethnicityOther/Unknown           4.912382e-04          ***
+## race_ethnicityWhite                   5.169522e-01</code></pre>
+<pre class="r"><code>ggplot(summary_data, aes(x = uhf_label, y = proportion_concurrent, color = race_ethnicity)) +
+  geom_point(size = 2, alpha = 0.8) +  # Keep points for visibility
+  facet_wrap(~ sex, scales = &quot;free_y&quot;) +  # Separate panels for each sex
+  labs(
+    title = &quot;Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood and Demographics&quot;,
+    x = &quot;Neighborhood (UHF Label)&quot;,
+    y = &quot;Proportion of Concurrent Diagnoses&quot;,
+    color = &quot;Race/Ethnicity&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, size = 14),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  ) +
+  scale_color_brewer(palette = &quot;Set1&quot;)</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
+<hr />
+</div>
+<div id="pattern-discussion" class="section level4">
+<h4>Pattern Discussion</h4>
+<div id="by-sex" class="section level5">
+<h5>By Sex:</h5>
+<p>In the “Female” and “Male” categories, the distribution of concurrent
+diagnoses appears similar in variation but may differ slightly in range
+and clustering. Men exhibit a slightly broader range in some
+neighborhoods compared to women.</p>
+</div>
+<div id="by-raceethnicity" class="section level5">
+<h5>By Race/Ethnicity:</h5>
+<p>Black and Latino/Hispanic populations have higher proportions of
+concurrent diagnoses in several neighborhoods compared to White or
+Asian/Pacific Islander populations. Other/Unknown groups show wide
+variability, likely influenced by limited data or inconsistent
+categorization.</p>
+<p>Certain racial/ethnic groups (e.g., White or Asian/Pacific Islander)
+appear clustered at lower proportions in many neighborhoods.</p>
+<pre class="r"><code># neighborhood summary
+neighborhood_summary &lt;- Merged_HIV_UHF_Data %&gt;%
+  group_by(neighborhood_u_h_f) %&gt;%
+  summarize(
+    total_concurrent_hiv_aids = sum(total_number_of_concurrent_hiv_aids_diagnoses, na.rm = TRUE),
+    total_hiv_diagnoses = sum(total_number_of_hiv_diagnoses, na.rm = TRUE),
+    proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
+  ) %&gt;%
+  arrange(desc(proportion_concurrent))
+
+print(neighborhood_summary)</code></pre>
+<pre><code>## # A tibble: 35 × 4
+##    neighborhood_u_h_f               total_concurrent_hiv_a…¹ total_hiv_diagnoses
+##    &lt;chr&gt;                                               &lt;int&gt;               &lt;int&gt;
+##  1 &quot;Bayside - Little Neck&quot;                                12                  44
+##  2 &quot;Coney Island -\nSheepshead Bay&quot;                      180                 664
+##  3 &quot;Southwest Queens&quot;                                    272                1036
+##  4 &quot;Borough Park&quot;                                        116                 492
+##  5 &quot;Canarsie - Flatlands&quot;                                220                 956
+##  6 &quot;West Queens&quot;                                         612                2744
+##  7 &quot;East Flatbush -\nFlatbush&quot;                           512                2320
+##  8 &quot;Flushing - Clearview&quot;                                112                 508
+##  9 &quot;Stapleton - St.\nGeorge&quot;                              88                 400
+## 10 &quot;Sunset Park&quot;                                          92                 424
+## # ℹ 25 more rows
+## # ℹ abbreviated name: ¹​total_concurrent_hiv_aids
+## # ℹ 1 more variable: proportion_concurrent &lt;dbl&gt;</code></pre>
+<pre class="r"><code># visualization of Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood
+ggplot(neighborhood_summary, aes(x = reorder(neighborhood_u_h_f, -proportion_concurrent), y = proportion_concurrent)) +
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;steelblue&quot;) +
+  coord_flip() +  
+  labs(
+    title = &quot;Proportion of Concurrent HIV/AIDS Diagnoses by Neighborhood&quot;,
+    x = &quot;Neighborhood&quot;,
+    y = &quot;Proportion of Concurrent Diagnoses&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 14)
+  )</code></pre>
+<p><img src="Data_analysis_files/figure-html/unnamed-chunk-20-1.png" width="90%" /></p>
+<hr />
+</div>
+</div>
+<div id="pattern-discussion-1" class="section level4">
+<h4>Pattern Discussion</h4>
+<p>The neighborhoods are ranked by their proportions, with Greenwich
+Village-Downtown having the lowest proportion and Sheepshead Bay the
+highest. The visualization highlights geographic variability in
+concurrent diagnoses, suggesting that certain neighborhoods may face
+distinct challenges in early detection or healthcare access.</p>
 </div>
 </div>
 
