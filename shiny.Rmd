@@ -24,10 +24,10 @@ Column {data-width=500}
 
 ### HIV
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE}
 # Load datasets
 HIV_UHF_df <- read.csv("./data/Merged_HIV_UHF_Data.csv")
-uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp")
+uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp", quiet = TRUE)
 
 # Transform spatial data to WGS84
 uhf_geometries <- st_transform(uhf_geometries, crs = 4326)
@@ -95,10 +95,10 @@ Column {data-width=500}
 
 ### AIDS
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE}
 # Load datasets
 HIV_UHF_df <- read.csv("./data/Merged_HIV_UHF_Data.csv")
-uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp")
+uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp", quiet = TRUE)
 
 # Transform spatial data to WGS84
 uhf_geometries <- st_transform(uhf_geometries, crs = 4326)
