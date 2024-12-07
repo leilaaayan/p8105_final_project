@@ -21,7 +21,7 @@ Understanding the distribution of HIV among racial groups in different areas of 
 
 ---------------------------------
 
-## Distribution Map
+## Distribution
 
 ```{r, include=FALSE}
 # Load packages

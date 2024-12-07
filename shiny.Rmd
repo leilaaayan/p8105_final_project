@@ -1,5 +1,5 @@
 ---
-title: "Shiny"
+title: "Welcome！Click on each UHF area to check the total number of diagnoses from 2016 to 2021."
 output: 
   flexdashboard::flex_dashboard:
     theme:
