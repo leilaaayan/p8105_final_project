@@ -83,22 +83,25 @@ head(hiv_trends)
 ```
 
 ```{r, message=FALSE}
-# Plot HIV diagnosis trends by neighborhood with a legend
+# Plot HIV diagnosis trends by neighborhood
 ggplot(hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
-  geom_line(size = 0.8, alpha = 0.7) +
+  geom_line(size = 0.5, alpha = 0.6) + 
   labs(
-    title = "Temporal Trends in HIV Diagnoses by Neighborhood (2016 Onwards)",
+    title = "Temporal Trends in HIV Diagnoses by Neighborhood",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
   ) +
   theme_minimal() +
   theme(
-    legend.position = "right", # Display the legend on the right
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = "right",
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )
+
 
 ```
 
@@ -130,7 +133,7 @@ head(top_hiv_trends)
 ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1.2) +
   labs(
-    title = "Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods (2016 Onwards)",
+    title = "Temporal Trends in HIV Diagnoses for Top 10 Neighborhoods",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
@@ -138,9 +141,11 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
   theme_minimal() +
   theme(
     legend.position = "right",
-    legend.text = element_text(size = 10),
-    legend.title = element_text(size = 12),
-    plot.title = element_text(hjust = 0.5, size = 14)
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )
 
 ```
@@ -150,17 +155,19 @@ ggplot(top_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, col
 ggplot(hiv_trends, aes(x = YEAR, y = avg_aids_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 0.8, alpha = 0.7) +
   labs(
-    title = "Temporal Trends in AIDS Diagnoses by Neighborhood (2016 Onwards)",
+    title = "Temporal Trends in AIDS Diagnoses by Neighborhood",
     x = "Year",
     y = "Average AIDS Diagnoses per 100,000 Population",
     color = "Neighborhood"
   ) +
   theme_minimal() +
   theme(
-    legend.position = "right", # Display the legend on the right
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = "right",
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )
 
 ```
@@ -198,19 +205,20 @@ filtered_aids_trends <- hiv_data %>%
 ggplot(filtered_hiv_trends, aes(x = YEAR, y = avg_hiv_rate, group = Neighborhood, color = Neighborhood)) +
   geom_line(size = 1) +
   labs(
-    title = "Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods, 2016 Onwards)",
+    title = "Temporal Trends in HIV Diagnoses (Top 10 Neighborhoods)",
     x = "Year",
     y = "Average HIV Diagnoses per 100,000 Population",
     color = "Neighborhood"
   ) +
   theme_minimal() +
   theme(
-    legend.position = "right", # Display legend
-    plot.title = element_text(hjust = 0.5),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 10)
+    legend.position = "right",
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 10), 
+    axis.text = element_text(size = 6),  
+    axis.title = element_text(size = 8)  
   )
-
 ```
 
 ```{r}
