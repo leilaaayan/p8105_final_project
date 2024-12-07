@@ -294,16 +294,8 @@ diagnoses among total HIV diagnoses, and how does this vary by
 neighborhood and demographic group?</li>
 </ol>
 <pre class="r"><code># load the package
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(ggplot2)
 library(sf)</code></pre>
 <pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
 <pre class="r"><code>library(RColorBrewer)
@@ -319,8 +311,8 @@ summary_data &lt;- Merged_HIV_UHF_Data %&gt;%
     proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
   ) %&gt;%
   arrange(desc(proportion_concurrent))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;, &#39;sex&#39;. You can override using
-## the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;, &#39;sex&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code># Fit the linear regression model
 lm_model &lt;- lm(proportion_concurrent ~ uhf_label + sex + race_ethnicity, data = summary_data)
 
@@ -411,8 +403,8 @@ print(coeff_table)</code></pre>
     legend.text = element_text(size = 10)
   ) +
   scale_color_brewer(palette = &quot;Set1&quot;)</code></pre>
-<pre><code>## Warning: Removed 63 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 63 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="Research-question-3_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code># neighborhood
 neighborhood_summary &lt;- Merged_HIV_UHF_Data %&gt;%

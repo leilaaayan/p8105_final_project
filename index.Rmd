@@ -1,9 +1,11 @@
 ---
 title: "HIV by Neighborhood and Ethnicity"
+author: "Shumei Liu, Alice Mao, Tong Su, Shike Zhang, Leila Ya"
 output: 
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
 
 ---------------------------------
@@ -22,9 +24,69 @@ Understanding the distribution of HIV among racial groups in different areas of 
 
 ## Distribution Map
 
-```{r}
-
+```{r, include=FALSE}
+# Load packages
+library(tidygeocoder)
+library(dplyr)
+library(leaflet)
 ```
+
+```{r, message=FALSE}
+# Load your CSV data
+df_uhf <- read.csv("./data/Merged_HIV_UHF_Data.csv")
+
+# Add full address for geocoding
+df_uhf <- df_uhf |> 
+  mutate(full_address = paste(neighborhood_u_h_f, "New York, USA", sep = ", "))
+
+# Perform geocoding
+df_uhf_geo <- df_uhf |> 
+  geocode(address = full_address, method = "osm", full_results = FALSE)
+
+# Filter results to NYC bounds
+df_uhf_geo <- df_uhf_geo |> 
+  filter(lat >= 40.4774 & lat <= 40.9176 & long >= -74.2591 & long <= -73.7004)
+
+
+leaflet(df_uhf_geo) |> 
+  addProviderTiles(providers$CartoDB.Positron) |> 
+  setView(lng = -73.935242, lat = 40.730610, zoom = 11) |> 
+  
+# Add HIV Diagnoses layer
+addCircleMarkers(
+  lng = ~long, lat = ~lat,
+  radius = ~sqrt(hiv_diagnoses_per_100_000_population) / 2,  # Adjust radius based on HIV data
+  label = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
+                 "HIV Diagnoses:", hiv_diagnoses_per_100_000_population),  # Multi-line label
+  popup = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
+                 "Code:", uhf_label, "<br>",
+                 "HIV Diagnoses per 100,000 Population:", hiv_diagnoses_per_100_000_population),
+  color = "red",  # Set color for HIV data
+  fillOpacity = 0.7,
+  group = "HIV Diagnoses"  # Add group for layer control
+  ) |> 
+  
+# Add AIDS Diagnoses layer
+addCircleMarkers(
+  lng = ~long, lat = ~lat,
+  radius = ~sqrt(aids_diagnoses_per_100_000_population) / 2,  # Adjust radius based on AIDS data
+  label = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
+                 "AIDS Diagnoses:", aids_diagnoses_per_100_000_population),  # Multi-line label
+  popup = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
+                 "Code:", uhf_label, "<br>",
+                 "AIDS Diagnoses per 100,000 Population:", aids_diagnoses_per_100_000_population),
+  color = "blue",  # Set color for AIDS data
+  fillOpacity = 0.7,
+  group = "AIDS Diagnoses"  # Add group for layer control
+  ) |> 
+  
+# Add layer controls for toggling between datasets
+addLayersControl(
+  overlayGroups = c("HIV Diagnoses", "AIDS Diagnoses"),  # Specify layer groups
+  options = layersControlOptions(collapsed = FALSE)  # Keep control panel open
+  )
+```
+
 
 ---------------------------------
 
