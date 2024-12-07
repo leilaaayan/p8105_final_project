@@ -3,9 +3,6 @@ title: "Shiny"
 output: 
   flexdashboard::flex_dashboard:
     theme:
-      bg: "#101010"
-      fg: "#FDF7F7" 
-      primary: "#ED79F9"
       base_font:
         google: Prompt
       code_font:
@@ -17,121 +14,146 @@ runtime: shiny
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-# Install thematic and un-comment for themed static plots (i.e., ggplot2)
-# thematic::thematic_rmd()
+library(dplyr)
+library(leaflet)
+library(sf)
 ```
 
-Column {data-width=500 .tabset}
+Column {data-width=1000 .tabset}
 -----------------------------------------------------------------------
 
-### Chart A
+### HIV
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Load datasets
+HIV_UHF_df <- read.csv("./data/Merged_HIV_UHF_Data.csv")
+uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp")
 
-```
+# Transform spatial data to WGS84
+uhf_geometries <- st_transform(uhf_geometries, crs = 4326)
 
-### Chart B
+# Summarize total HIV diagnoses from 2016-2021 by UHF code
+hiv_summary <- HIV_UHF_df %>%
+  filter(year >= 2016 & year <= 2021) %>%  # Filter years 2016 to 2021
+  group_by(uhf_label) %>%  # Group by UHF code
+  summarise(total_hiv_diagnoses = sum(total_number_of_hiv_diagnoses, na.rm = TRUE))  # Sum diagnoses
 
-```{r}
+# Merge summarized data with UHF geometries
+map_data <- uhf_geometries %>%
+  left_join(hiv_summary, by = c("UHFCODE" = "uhf_label"))
 
-```
+# Handle NA values in the total HIV diagnoses
+map_data$total_hiv_diagnoses[is.na(map_data$total_hiv_diagnoses)] <- 0
 
-Column {data-width=500 .tabset}
------------------------------------------------------------------------
-
-### HIV Diagnoses
-
-```{r, echo=FALSE}
-library(shiny)
-library(ggplot2)
-
-# Load the dataset
-data <- read.csv("./data/Merged_HIV_UHF_Data.csv")
-
-# Create the Shiny app
-ui <- fluidPage(
-  titlePanel("HIV Diagnoses by Race/Ethnicity in Different Neighborhoods"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(
-        inputId = "neighborhood",
-        label = "Select a Neighborhood (UHF):",
-        choices = unique(data$neighborhood_u_h_f),
-        selected = unique(data$neighborhood_u_h_f)[1]
-      )
-    ),
-    mainPanel(
-      plotOutput(outputId = "barPlot")
-    )
-  )
+# Define color palette
+palette <- colorNumeric(
+  palette = "YlOrRd",
+  domain = map_data$total_hiv_diagnoses
 )
 
-server <- function(input, output) {
-  
-  filtered_data <- reactive({
-    data[data$neighborhood_u_h_f == input$neighborhood & data$race_ethnicity != "All", ]
-  })
+# Create bounding box for the map
+uhf_bbox <- st_bbox(map_data)
 
-  output$barPlot <- renderPlot({
-    ggplot(filtered_data(), aes(x = race_ethnicity, y = hiv_diagnoses_per_100_000_population, fill = race_ethnicity)) +
-      geom_bar(stat = "identity") +
-      labs(
-        title = paste("HIV Diagnoses per 100,000 Population in", input$neighborhood),
-        x = "Race/Ethnicity",
-        y = "HIV Diagnoses per 100,000 Population"
-      ) +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  })
-}
+# Create labels as a named list
+labels <- lapply(seq_len(nrow(map_data)), function(i) {
+  paste0(
+    "<strong>UHF Code:</strong> ", map_data$UHFCODE[i], "<br>",
+    "<strong>Neighborhood:</strong> ", map_data$UHF_NEIGH[i], "<br>",
+    "<strong>Total HIV Diagnoses:</strong> ", map_data$ total_hiv_diagnoses[i], "<br>"
+  )
+})
 
-shinyApp(ui = ui, server = server)
-
+# Create the Leaflet map
+leaflet(map_data) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~palette(total_hiv_diagnoses),
+    weight = 1,
+    opacity = 1,
+    color = "black",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 2,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = lapply(labels, htmltools::HTML)  # Convert labels to HTML-safe list
+  ) %>%
+  addLegend(
+    pal = palette,
+    values = map_data$total_hiv_diagnoses,
+    title = "HIV Diagnoses (2016-2021)",
+    position = "bottomright"
+  )
 ```
 
-### AIDS Diagnoses
+### AIDS
 
-```{r, echo=FALSE}
-# Create the Shiny app
-ui <- fluidPage(
-  titlePanel("AIDS Diagnoses by Race/Ethnicity in Different Neighborhoods"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(
-        inputId = "neighborhood",
-        label = "Select a Neighborhood (UHF):",
-        choices = unique(data$neighborhood_u_h_f),
-        selected = unique(data$neighborhood_u_h_f)[1]
-      )
-    ),
-    mainPanel(
-      plotOutput(outputId = "barPlot")
-    )
-  )
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Load datasets
+HIV_UHF_df <- read.csv("./data/Merged_HIV_UHF_Data.csv")
+uhf_geometries <- st_read("./data/UHF/UHF_42_DOHMH_2009.shp")
+
+# Transform spatial data to WGS84
+uhf_geometries <- st_transform(uhf_geometries, crs = 4326)
+
+# Summarize total HIV diagnoses from 2016-2021 by UHF code
+aids_summary <- HIV_UHF_df %>%
+  filter(year >= 2016 & year <= 2021) %>%  # Filter years 2016 to 2021
+  group_by(uhf_label) %>%  # Group by UHF code
+  summarise(total_aids_diagnoses = sum(total_number_of_aids_diagnoses, na.rm = TRUE))  # Sum diagnoses
+
+# Merge summarized data with UHF geometries
+map_data <- uhf_geometries %>%
+  left_join(aids_summary, by = c("UHFCODE" = "uhf_label"))
+
+# Handle NA values in the total HIV diagnoses
+map_data$total_aids_diagnoses[is.na(map_data$total_aids_diagnoses)] <- 0
+
+# Define color palette
+palette <- colorNumeric(
+  palette = "YlOrRd",
+  domain = map_data$total_aids_diagnoses
 )
 
-server <- function(input, output) {
-  
-  # Filter data based on user selection
-  filtered_data <- reactive({
-    data[data$neighborhood_u_h_f == input$neighborhood & data$race_ethnicity != "All", ]
-  })
+# Create bounding box for the map
+uhf_bbox <- st_bbox(map_data)
 
-  # Render the bar plot
-  output$barPlot <- renderPlot({
-    ggplot(filtered_data(), aes(x = race_ethnicity, y = aids_diagnoses_per_100_000_population, fill = race_ethnicity)) +
-      geom_bar(stat = "identity") +
-      labs(
-        title = paste("AIDS Diagnoses per 100,000 Population in", input$neighborhood),
-        x = "Race/Ethnicity",
-        y = "AIDS Diagnoses per 100,000 Population"
-      ) +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  })
-}
+# Create labels as a named list
+labels <- lapply(seq_len(nrow(map_data)), function(i) {
+  paste0(
+    "<strong>UHF Code:</strong> ", map_data$UHFCODE[i], "<br>",
+    "<strong>Neighborhood:</strong> ", map_data$UHF_NEIGH[i], "<br>",
+    "<strong>Total AIDS Diagnoses:</strong> ", map_data$ total_aids_diagnoses[i], "<br>"
+  )
+})
 
-# Run the Shiny app
-shinyApp(ui = ui, server = server)
+# Create the Leaflet map
+leaflet(map_data) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~palette(total_aids_diagnoses),
+    weight = 1,
+    opacity = 1,
+    color = "black",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 2,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = lapply(labels, htmltools::HTML)  # Convert labels to HTML-safe list
+  ) %>%
+  addLegend(
+    pal = palette,
+    values = map_data$total_aids_diagnoses,
+    title = "AIDS Diagnoses (2016-2021)",
+    position = "bottomright"
+  )
 ```
-

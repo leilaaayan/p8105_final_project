@@ -28,6 +28,7 @@ Understanding the distribution of HIV among racial groups in different areas of 
 library(tidygeocoder)
 library(dplyr)
 library(leaflet)
+library(plotly)
 ```
 
 ```{r, message=FALSE}
@@ -55,10 +56,10 @@ leaflet(df_uhf_geo) |>
 addCircleMarkers(
   lng = ~long, lat = ~lat,
   radius = ~sqrt(hiv_diagnoses_per_100_000_population) / 2,  # Adjust radius based on HIV data
-  label = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
-                 "HIV Diagnoses:", hiv_diagnoses_per_100_000_population),  # Multi-line label
+  label = ~paste("Neighborhood:", neighborhood_u_h_f, ";",
+                 "\nHIV Diagnoses:", hiv_diagnoses_per_100_000_population),
   popup = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
-                 "Code:", uhf_label, "<br>",
+                 "UHF:", uhf_label, "<br>",
                  "HIV Diagnoses per 100,000 Population:", hiv_diagnoses_per_100_000_population),
   color = "red",  # Set color for HIV data
   fillOpacity = 0.7,
@@ -69,10 +70,10 @@ addCircleMarkers(
 addCircleMarkers(
   lng = ~long, lat = ~lat,
   radius = ~sqrt(aids_diagnoses_per_100_000_population) / 2,  # Adjust radius based on AIDS data
-  label = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
+  label = ~paste("Neighborhood:", neighborhood_u_h_f, ";",
                  "AIDS Diagnoses:", aids_diagnoses_per_100_000_population),  # Multi-line label
   popup = ~paste("Neighborhood:", neighborhood_u_h_f, "<br>",
-                 "Code:", uhf_label, "<br>",
+                 "HUF:", uhf_label, "<br>",
                  "AIDS Diagnoses per 100,000 Population:", aids_diagnoses_per_100_000_population),
   color = "blue",  # Set color for AIDS data
   fillOpacity = 0.7,
@@ -86,9 +87,5 @@ addLayersControl(
   )
 ```
 
-
----------------------------------
-
-## Screencast
 
 

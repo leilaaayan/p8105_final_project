@@ -9,6 +9,8 @@ navbar:
       href: Data_analysis.html
     - text: "Project Report"
       href: report.html
+    - text: "Shiny App"
+      href: shiny.html
   right:
     - text: "About The Team"
       href: about.html
