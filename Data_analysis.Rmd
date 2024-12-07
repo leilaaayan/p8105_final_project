@@ -426,7 +426,7 @@ ggplot(summary_data, aes(x = uhf_label, y = proportion_concurrent, color = race_
 
 ---------------------------------
 
-### Pattern Discussion
+### Pattern Discussion by Sex and Race/Ethnicity
 
 #### By Sex:
 
