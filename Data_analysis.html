@@ -369,6 +369,8 @@ class="section level2">
 <h2>How have HIV and AIDS diagnoses changed over time, and do specific
 neighborhoods experience disproportionately high rates?</h2>
 <hr />
+<div id="analysis" class="section level3">
+<h3>Analysis</h3>
 <pre class="r"><code># Aggregate HIV and AIDS diagnoses
 hiv_trends &lt;- hiv_data %&gt;%
   group_by(YEAR, Neighborhood) %&gt;%
@@ -632,8 +634,9 @@ high_hiv_neighborhoods %&gt;%
 </tbody>
 </table>
 <hr />
-<div id="conclusion" class="section level4">
-<h4>Conclusion</h4>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion</h3>
 <p>The analysis of temporal trends in HIV diagnoses demonstrates a
 significant downward trend in diagnosis rates from 2016 onward. The
 linear regression model revealed a slope of -1.982, indicating an
@@ -654,6 +657,8 @@ class="section level2">
 <h2>Are there significant disparities in HIV/AIDS diagnoses across sex
 and race/ethnicity?</h2>
 <hr />
+<div id="analysis-1" class="section level3">
+<h3>Analysis</h3>
 <pre class="r"><code># Group by sex and calculate average HIV diagnoses
 hiv_by_sex &lt;- hiv_data %&gt;%
   group_by(SEX) %&gt;%
@@ -1299,8 +1304,9 @@ tidy(hiv_multivariate_lm) %&gt;%
 </tbody>
 </table>
 <hr />
-<div id="conclusion-1" class="section level4">
-<h4>Conclusion</h4>
+</div>
+<div id="conclusion-1" class="section level3">
+<h3>Conclusion</h3>
 <p>The analysis of demographic disparities in HIV diagnoses revealed
 significant differences across sex and race/ethnicity. The linear
 regression model identified males as having significantly higher HIV
@@ -1385,8 +1391,8 @@ summary(lm_model)</code></pre>
 ## Multiple R-squared:  0.04472,    Adjusted R-squared:  0.03102 
 ## F-statistic: 3.265 on 8 and 558 DF,  p-value: 0.001198</code></pre>
 <hr />
-<div id="model-discussion" class="section level4">
-<h4>Model Discussion</h4>
+<div id="model-discussion" class="section level3">
+<h3>Model Discussion</h3>
 <p>The model explains a small proportion of the variability in the data
 (R-squared = 0.04472), suggesting that other unmeasured factors may play
 a more significant role. While the model is statistically significant
@@ -1449,17 +1455,17 @@ print(coeff_table)</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
 <hr />
 </div>
-<div id="pattern-discussion" class="section level4">
-<h4>Pattern Discussion</h4>
-<div id="by-sex" class="section level5">
-<h5>By Sex:</h5>
+<div id="pattern-discussion" class="section level3">
+<h3>Pattern Discussion</h3>
+<div id="by-sex" class="section level4">
+<h4>By Sex:</h4>
 <p>In the “Female” and “Male” categories, the distribution of concurrent
 diagnoses appears similar in variation but may differ slightly in range
 and clustering. Men exhibit a slightly broader range in some
 neighborhoods compared to women.</p>
 </div>
-<div id="by-raceethnicity" class="section level5">
-<h5>By Race/Ethnicity:</h5>
+<div id="by-raceethnicity" class="section level4">
+<h4>By Race/Ethnicity:</h4>
 <p>Black and Latino/Hispanic populations have higher proportions of
 concurrent diagnoses in several neighborhoods compared to White or
 Asian/Pacific Islander populations. Other/Unknown groups show wide
@@ -1512,8 +1518,8 @@ ggplot(neighborhood_summary, aes(x = reorder(neighborhood_u_h_f, -proportion_con
 <hr />
 </div>
 </div>
-<div id="pattern-discussion-1" class="section level4">
-<h4>Pattern Discussion</h4>
+<div id="pattern-discussion-1" class="section level3">
+<h3>Pattern Discussion</h3>
 <p>The neighborhoods are ranked by their proportions, with Greenwich
 Village-Downtown having the lowest proportion and Sheepshead Bay the
 highest. The visualization highlights geographic variability in
