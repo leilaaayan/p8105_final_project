@@ -1,0 +1,137 @@
+---
+title: "Shiny"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#101010"
+      fg: "#FDF7F7" 
+      primary: "#ED79F9"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+# Install thematic and un-comment for themed static plots (i.e., ggplot2)
+# thematic::thematic_rmd()
+```
+
+Column {data-width=500 .tabset}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r, echo=FALSE}
+
+```
+
+### Chart B
+
+```{r}
+
+```
+
+Column {data-width=500 .tabset}
+-----------------------------------------------------------------------
+
+### HIV Diagnoses
+
+```{r, echo=FALSE}
+library(shiny)
+library(ggplot2)
+
+# Load the dataset
+data <- read.csv("./data/Merged_HIV_UHF_Data.csv")
+
+# Create the Shiny app
+ui <- fluidPage(
+  titlePanel("HIV Diagnoses by Race/Ethnicity in Different Neighborhoods"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "neighborhood",
+        label = "Select a Neighborhood (UHF):",
+        choices = unique(data$neighborhood_u_h_f),
+        selected = unique(data$neighborhood_u_h_f)[1]
+      )
+    ),
+    mainPanel(
+      plotOutput(outputId = "barPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  filtered_data <- reactive({
+    data[data$neighborhood_u_h_f == input$neighborhood & data$race_ethnicity != "All", ]
+  })
+
+  output$barPlot <- renderPlot({
+    ggplot(filtered_data(), aes(x = race_ethnicity, y = hiv_diagnoses_per_100_000_population, fill = race_ethnicity)) +
+      geom_bar(stat = "identity") +
+      labs(
+        title = paste("HIV Diagnoses per 100,000 Population in", input$neighborhood),
+        x = "Race/Ethnicity",
+        y = "HIV Diagnoses per 100,000 Population"
+      ) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+### AIDS Diagnoses
+
+```{r, echo=FALSE}
+# Create the Shiny app
+ui <- fluidPage(
+  titlePanel("AIDS Diagnoses by Race/Ethnicity in Different Neighborhoods"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "neighborhood",
+        label = "Select a Neighborhood (UHF):",
+        choices = unique(data$neighborhood_u_h_f),
+        selected = unique(data$neighborhood_u_h_f)[1]
+      )
+    ),
+    mainPanel(
+      plotOutput(outputId = "barPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  # Filter data based on user selection
+  filtered_data <- reactive({
+    data[data$neighborhood_u_h_f == input$neighborhood & data$race_ethnicity != "All", ]
+  })
+
+  # Render the bar plot
+  output$barPlot <- renderPlot({
+    ggplot(filtered_data(), aes(x = race_ethnicity, y = aids_diagnoses_per_100_000_population, fill = race_ethnicity)) +
+      geom_bar(stat = "identity") +
+      labs(
+        title = paste("AIDS Diagnoses per 100,000 Population in", input$neighborhood),
+        x = "Race/Ethnicity",
+        y = "AIDS Diagnoses per 100,000 Population"
+      ) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+}
+
+# Run the Shiny app
+shinyApp(ui = ui, server = server)
+```
+
