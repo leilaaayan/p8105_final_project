@@ -118,7 +118,7 @@ ggplot(neighborhood_summary, aes(x = reorder(neighborhood_u_h_f, -proportion_con
   ) +
   theme_minimal() +
   theme(
-    axis.text.y = element_text(size = 8),
+    axis.text.y = element_text(size = 4, hjust = 1),
     plot.title = element_text(hjust = 0.5, size = 14)
   )
 ```
