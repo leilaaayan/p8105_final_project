@@ -4,6 +4,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
 
 ---------------------------------
@@ -33,24 +34,76 @@ The purposes of this project is to answer the following questions:
 2. Demographic Disparities: Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
 
 3. Concurrent Diagnoses: Do concurrent HIV/AIDS diagnoses (late diagnoses) differ significantly across neighborhoods, and are these patterns influenced by other factors like race/ethnicity?
+
 ---------------------------------
 
 ## Data 
 
-Source, scraping method, cleaning, etc.
+Source:
+
+
+
+
+
 
 ---------------------------------
 
 ## Exploratory analysis 
 
-Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+Our analysis including the following:
+
+### Temporal trends of HIV diagnoses
+
+We began to explore the trends of HIV diagnoses from 2016 to 2021 in NYC. We try to look at the trend on a large scale so that we can have an initial judgement conclusion.Then, we tried to look at AIDS diagnosis trends in different parts of New York City with the same scope.
+
+
+![hiv_borough](Exploratory_data_analysis_files/figure-html/hiv_borough.png)
+
+The Bronx consistently has the highest HIV diagnosis rates, with a decline between 2016 and 2018 followed by a rebound that peaked in 2021, likely driven by socio-economic challenges and healthcare access issues. In contrast, Staten Island has the lowest rates, with a sharp decline from 2016 to 2017 before stabilizing, suggesting effective interventions or a smaller population base. While most boroughs show declining or stabilizing trends, the Bronx's increasing rates underscore significant disparities and the urgent need for targeted, borough-specific strategies.
+
+### Temporal trends of AID diagnoses
+
+![aids_borough](Exploratory_data_analysis_files/figure-html/aids_borough.png)
+
+The Bronx experienced a dramatic spike in HIV diagnoses in 2021, reversing a declining trend from 2016 to 2019. This sharp increase suggests systemic issues such as delayed diagnoses, treatment interruptions, or lack of timely access to antiretroviral therapy (ART). In contrast, Staten Island's HIV diagnosis rates remain consistently low, similar to Queens, with only a slight increase from 2020 to 2021, warranting further investigation despite remaining well below rates in the Bronx and Manhattan.
+
+
+### HIV Diagnoses by Sex and Race/Ethnicity
+
+After looking at the region, we wanted to see if there were significant differences in HIV diagnoses by race and gender, which could help us make better predictions and improvements in health care and the community.
+
+![hiv_eth_sex](Exploratory_data_analysis_files/figure-html/hiv_eth_sex.png)
+
+Black populations have the highest HIV diagnosis rates, followed by Latino/Hispanic populations, while Asian/Pacific Islander and White groups consistently show the lowest rates, highlighting stark racial disparities. Males across all racial/ethnic groups have higher diagnosis rates than females, particularly Black and Latino/Hispanic males, who show significant outliers, indicating areas requiring focused interventions. Although females have lower overall rates, Black females face notable disparities compared to other groups. These patterns underscore systemic inequities in access to prevention, testing, and treatment, with Black and Latino/Hispanic populations requiring prioritized healthcare services and interventions.
+
+
+### Proportion of concurrent diagnoses by neighborhood
+
+It is worth mentioning that we have the same interest in the complications of HIV, which can help people to better understand such conditions.
+
+![CD_neighbor](Exploratory_data_analysis_files/figure-html/CD_neighbor.png)
+
+Within the same borough, concurrent HIV/AIDS diagnosis rates vary widely across neighborhoods, with certain areas in Brooklyn (e.g., Bedford-Stuyvesant) and Manhattan (e.g., Greenwich Village, Chelsea) showing exceptionally high rates, often exceeding 150%, while Staten Island and Queens maintain lower percentages. These outliers in Brooklyn and Manhattan suggest structural challenges related to healthcare access, awareness, or socio-economic factors. Community-level disparities emphasize the role of localized healthcare infrastructure and socio-economic conditions. The high rate of concurrent diagnoses reflects late HIV detection, often when patients have progressed to AIDS, highlighting an urgent need for earlier testing and intervention efforts.
+
+
+### Proportion of Concurrent Diagnoses by Sex
+
+![CD_gender](Exploratory_data_analysis_files/figure-html/CD_gender.png)
+
+The proportion of concurrent diagnoses varies widely across boroughs, with Staten Island having the highest overall rate, particularly among females, which stands out as a significant outlier warranting further investigation. Queens also shows a relatively high proportion among females, while other boroughs display a more balanced distribution. The Bronx, despite its high HIV prevalence, demonstrates relatively balanced proportions, suggesting effective early detection and treatment efforts. Most boroughs exhibit higher rates among males, aligning with data on delayed diagnoses among men, especially men who have sex with men (MSM).
+
+### Proportion of Concurrent Diagnoses by Race/Ethnicity
+
+![CD_eth](Exploratory_data_analysis_files/figure-html/CD_eth.png)
+
+Asian/Pacific Islanders in the Bronx have the highest rates of concurrent diagnoses, surpassing all other racial/ethnic groups across boroughs. Staten Island also exhibits very high rates among Whites and the Other/Unknown category, with similar trends in Queens. Black and Latino/Hispanic populations show consistent proportions across boroughs but remain highest in the Bronx. Brooklyn and Queens have notably lower percentages of Asian/Pacific Islanders compared to the Bronx. High rates in specific groups in the Bronx and Staten Island likely reflect delayed diagnoses or systemic barriers such as limited access to care, stigma, or socioeconomic challenges. Overrepresentation of Other/Unknown racial groups suggests potential data limitations or gaps.
+
 
 ---------------------------------
 
 ## Data Analysis
 
 1. Temporal Trends
-
 
 
 2. Demographic Disparities

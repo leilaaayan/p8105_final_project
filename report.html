@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -221,6 +222,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -356,6 +360,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Project Report</h1>
@@ -407,24 +419,144 @@ time, and do specific neighborhoods experience disproportionately high
 rates?</p></li>
 <li><p>Demographic Disparities: Are there significant disparities in
 HIV/AIDS diagnoses across sex and race/ethnicity?</p></li>
-<li><h2
-id="concurrent-diagnoses-do-concurrent-hivaids-diagnoses-late-diagnoses-differ-significantly-across-neighborhoods-and-are-these-patterns-influenced-by-other-factors-like-raceethnicity">Concurrent
-Diagnoses: Do concurrent HIV/AIDS diagnoses (late diagnoses) differ
-significantly across neighborhoods, and are these patterns influenced by
-other factors like race/ethnicity?</h2></li>
+<li><p>Concurrent Diagnoses: Do concurrent HIV/AIDS diagnoses (late
+diagnoses) differ significantly across neighborhoods, and are these
+patterns influenced by other factors like race/ethnicity?</p></li>
 </ol>
+<hr />
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>Source, scraping method, cleaning, etc.</p>
+<p>Source:</p>
 <hr />
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
-<p>Visualizations, summaries, and exploratory statistical analyses.
-Justify the steps you took, and show any major changes to your
-ideas.</p>
+<p>Our analysis including the following:</p>
+<div id="temporal-trends-of-hiv-diagnoses" class="section level3">
+<h3>Temporal trends of HIV diagnoses</h3>
+<p>We began to explore the trends of HIV diagnoses from 2016 to 2021 in
+NYC. We try to look at the trend on a large scale so that we can have an
+initial judgement conclusion.Then, we tried to look at AIDS diagnosis
+trends in different parts of New York City with the same scope.</p>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/hiv_borough.png"
+alt="hiv_borough" />
+<div class="figcaption">hiv_borough</div>
+</div>
+<p>The Bronx consistently has the highest HIV diagnosis rates, with a
+decline between 2016 and 2018 followed by a rebound that peaked in 2021,
+likely driven by socio-economic challenges and healthcare access issues.
+In contrast, Staten Island has the lowest rates, with a sharp decline
+from 2016 to 2017 before stabilizing, suggesting effective interventions
+or a smaller population base. While most boroughs show declining or
+stabilizing trends, the Bronx’s increasing rates underscore significant
+disparities and the urgent need for targeted, borough-specific
+strategies.</p>
+</div>
+<div id="temporal-trends-of-aid-diagnoses" class="section level3">
+<h3>Temporal trends of AID diagnoses</h3>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/aids_borough.png"
+alt="aids_borough" />
+<div class="figcaption">aids_borough</div>
+</div>
+<p>The Bronx experienced a dramatic spike in HIV diagnoses in 2021,
+reversing a declining trend from 2016 to 2019. This sharp increase
+suggests systemic issues such as delayed diagnoses, treatment
+interruptions, or lack of timely access to antiretroviral therapy (ART).
+In contrast, Staten Island’s HIV diagnosis rates remain consistently
+low, similar to Queens, with only a slight increase from 2020 to 2021,
+warranting further investigation despite remaining well below rates in
+the Bronx and Manhattan.</p>
+</div>
+<div id="hiv-diagnoses-by-sex-and-raceethnicity" class="section level3">
+<h3>HIV Diagnoses by Sex and Race/Ethnicity</h3>
+<p>After looking at the region, we wanted to see if there were
+significant differences in HIV diagnoses by race and gender, which could
+help us make better predictions and improvements in health care and the
+community.</p>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/hiv_eth_sex.png"
+alt="hiv_eth_sex" />
+<div class="figcaption">hiv_eth_sex</div>
+</div>
+<p>Black populations have the highest HIV diagnosis rates, followed by
+Latino/Hispanic populations, while Asian/Pacific Islander and White
+groups consistently show the lowest rates, highlighting stark racial
+disparities. Males across all racial/ethnic groups have higher diagnosis
+rates than females, particularly Black and Latino/Hispanic males, who
+show significant outliers, indicating areas requiring focused
+interventions. Although females have lower overall rates, Black females
+face notable disparities compared to other groups. These patterns
+underscore systemic inequities in access to prevention, testing, and
+treatment, with Black and Latino/Hispanic populations requiring
+prioritized healthcare services and interventions.</p>
+</div>
+<div id="proportion-of-concurrent-diagnoses-by-neighborhood"
+class="section level3">
+<h3>Proportion of concurrent diagnoses by neighborhood</h3>
+<p>It is worth mentioning that we have the same interest in the
+complications of HIV, which can help people to better understand such
+conditions.</p>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/CD_neighbor.png"
+alt="CD_neighbor" />
+<div class="figcaption">CD_neighbor</div>
+</div>
+<p>Within the same borough, concurrent HIV/AIDS diagnosis rates vary
+widely across neighborhoods, with certain areas in Brooklyn (e.g.,
+Bedford-Stuyvesant) and Manhattan (e.g., Greenwich Village, Chelsea)
+showing exceptionally high rates, often exceeding 150%, while Staten
+Island and Queens maintain lower percentages. These outliers in Brooklyn
+and Manhattan suggest structural challenges related to healthcare
+access, awareness, or socio-economic factors. Community-level
+disparities emphasize the role of localized healthcare infrastructure
+and socio-economic conditions. The high rate of concurrent diagnoses
+reflects late HIV detection, often when patients have progressed to
+AIDS, highlighting an urgent need for earlier testing and intervention
+efforts.</p>
+</div>
+<div id="proportion-of-concurrent-diagnoses-by-sex"
+class="section level3">
+<h3>Proportion of Concurrent Diagnoses by Sex</h3>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/CD_gender.png"
+alt="CD_gender" />
+<div class="figcaption">CD_gender</div>
+</div>
+<p>The proportion of concurrent diagnoses varies widely across boroughs,
+with Staten Island having the highest overall rate, particularly among
+females, which stands out as a significant outlier warranting further
+investigation. Queens also shows a relatively high proportion among
+females, while other boroughs display a more balanced distribution. The
+Bronx, despite its high HIV prevalence, demonstrates relatively balanced
+proportions, suggesting effective early detection and treatment efforts.
+Most boroughs exhibit higher rates among males, aligning with data on
+delayed diagnoses among men, especially men who have sex with men
+(MSM).</p>
+</div>
+<div id="proportion-of-concurrent-diagnoses-by-raceethnicity"
+class="section level3">
+<h3>Proportion of Concurrent Diagnoses by Race/Ethnicity</h3>
+<div class="float">
+<img src="Exploratory_data_analysis_files/figure-html/CD_eth.png"
+alt="CD_eth" />
+<div class="figcaption">CD_eth</div>
+</div>
+<p>Asian/Pacific Islanders in the Bronx have the highest rates of
+concurrent diagnoses, surpassing all other racial/ethnic groups across
+boroughs. Staten Island also exhibits very high rates among Whites and
+the Other/Unknown category, with similar trends in Queens. Black and
+Latino/Hispanic populations show consistent proportions across boroughs
+but remain highest in the Bronx. Brooklyn and Queens have notably lower
+percentages of Asian/Pacific Islanders compared to the Bronx. High rates
+in specific groups in the Bronx and Staten Island likely reflect delayed
+diagnoses or systemic barriers such as limited access to care, stigma,
+or socioeconomic challenges. Overrepresentation of Other/Unknown racial
+groups suggests potential data limitations or gaps.</p>
 <hr />
+</div>
 </div>
 <div id="data-analysis" class="section level2">
 <h2>Data Analysis</h2>
@@ -476,6 +608,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
