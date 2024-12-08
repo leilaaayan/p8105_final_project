@@ -54,14 +54,19 @@ We began to explore the trends of HIV diagnoses from 2016 to 2021 in NYC. We try
 
 ![hiv_borough](Exploratory_data_analysis_files/figure-html/hiv_borough.png)
 
+
 The Bronx consistently has the highest HIV diagnosis rates, with a decline between 2016 and 2018 followed by a rebound that peaked in 2021, likely driven by socio-economic challenges and healthcare access issues. In contrast, Staten Island has the lowest rates, with a sharp decline from 2016 to 2017 before stabilizing, suggesting effective interventions or a smaller population base. While most boroughs show declining or stabilizing trends, the Bronx's increasing rates underscore significant disparities and the urgent need for targeted, borough-specific strategies.
+
+---------------------------------
 
 ### Temporal trends of AID diagnoses
 
 ![aids_borough](Exploratory_data_analysis_files/figure-html/aids_borough.png)
 
+
 The Bronx experienced a dramatic spike in HIV diagnoses in 2021, reversing a declining trend from 2016 to 2019. This sharp increase suggests systemic issues such as delayed diagnoses, treatment interruptions, or lack of timely access to antiretroviral therapy (ART). In contrast, Staten Island's HIV diagnosis rates remain consistently low, similar to Queens, with only a slight increase from 2020 to 2021, warranting further investigation despite remaining well below rates in the Bronx and Manhattan.
 
+---------------------------------
 
 ### HIV Diagnoses by Sex and Race/Ethnicity
 
@@ -69,8 +74,10 @@ After looking at the region, we wanted to see if there were significant differen
 
 ![hiv_eth_sex](Exploratory_data_analysis_files/figure-html/hiv_eth_sex.png)
 
+
 Black populations have the highest HIV diagnosis rates, followed by Latino/Hispanic populations, while Asian/Pacific Islander and White groups consistently show the lowest rates, highlighting stark racial disparities. Males across all racial/ethnic groups have higher diagnosis rates than females, particularly Black and Latino/Hispanic males, who show significant outliers, indicating areas requiring focused interventions. Although females have lower overall rates, Black females face notable disparities compared to other groups. These patterns underscore systemic inequities in access to prevention, testing, and treatment, with Black and Latino/Hispanic populations requiring prioritized healthcare services and interventions.
 
+---------------------------------
 
 ### Proportion of concurrent diagnoses by neighborhood
 
@@ -78,18 +85,24 @@ It is worth mentioning that we have the same interest in the complications of HI
 
 ![CD_neighbor](Exploratory_data_analysis_files/figure-html/CD_neighbor.png)
 
+
 Within the same borough, concurrent HIV/AIDS diagnosis rates vary widely across neighborhoods, with certain areas in Brooklyn (e.g., Bedford-Stuyvesant) and Manhattan (e.g., Greenwich Village, Chelsea) showing exceptionally high rates, often exceeding 150%, while Staten Island and Queens maintain lower percentages. These outliers in Brooklyn and Manhattan suggest structural challenges related to healthcare access, awareness, or socio-economic factors. Community-level disparities emphasize the role of localized healthcare infrastructure and socio-economic conditions. The high rate of concurrent diagnoses reflects late HIV detection, often when patients have progressed to AIDS, highlighting an urgent need for earlier testing and intervention efforts.
 
+---------------------------------
 
 ### Proportion of Concurrent Diagnoses by Sex
 
 ![CD_gender](Exploratory_data_analysis_files/figure-html/CD_gender.png)
 
+
 The proportion of concurrent diagnoses varies widely across boroughs, with Staten Island having the highest overall rate, particularly among females, which stands out as a significant outlier warranting further investigation. Queens also shows a relatively high proportion among females, while other boroughs display a more balanced distribution. The Bronx, despite its high HIV prevalence, demonstrates relatively balanced proportions, suggesting effective early detection and treatment efforts. Most boroughs exhibit higher rates among males, aligning with data on delayed diagnoses among men, especially men who have sex with men (MSM).
+
+---------------------------------
 
 ### Proportion of Concurrent Diagnoses by Race/Ethnicity
 
 ![CD_eth](Exploratory_data_analysis_files/figure-html/CD_eth.png)
+
 
 Asian/Pacific Islanders in the Bronx have the highest rates of concurrent diagnoses, surpassing all other racial/ethnic groups across boroughs. Staten Island also exhibits very high rates among Whites and the Other/Unknown category, with similar trends in Queens. Black and Latino/Hispanic populations show consistent proportions across boroughs but remain highest in the Bronx. Brooklyn and Queens have notably lower percentages of Asian/Pacific Islanders compared to the Bronx. High rates in specific groups in the Bronx and Staten Island likely reflect delayed diagnoses or systemic barriers such as limited access to care, stigma, or socioeconomic challenges. Overrepresentation of Other/Unknown racial groups suggests potential data limitations or gaps.
 
@@ -105,9 +118,11 @@ Asian/Pacific Islanders in the Bronx have the highest rates of concurrent diagno
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-6-1.png)
 
+
 Our group first examined whether there were any significant trends in HIV diagnoses in New York from 2016 to 2021. We then filtered out the top 10 neighborhoods with the highest number of HIV diagnoses.
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-7-1.png)
+
 
 Following the analysis of HIV, we also examined the trends in AIDS diagnoses. By comparison, the trends for HIV and AIDS diagnoses are similar.
 
@@ -121,9 +136,13 @@ tidy(hiv_lm) %>%
 
 The analysis of temporal trends in HIV diagnoses demonstrates a significant downward trend in diagnosis rates from 2016 onward. The linear regression model revealed a slope of -1.982, indicating an average annual decrease of approximately 1.98 HIV diagnoses per 100,000 population. The p-value for the `YEAR` variable was lower than 0.05, indicating a statistically significant evidence against the null hypothesis and confirming that the observed trend is not due to random variation. However, neighborhood-level disparities remain a significant concern. Analysis of outlier neighborhoods highlighted that certain areas consistently reported significantly higher HIV diagnosis rates.
 
+---------------------------------
+
 ### Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-10-1.png)
+
+
 This section focuses on demographic disparities. The graph shows a high proportion of HIV diagnoses among Black and Latino/Hispanic individuals."
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-10-2.png)
@@ -139,9 +158,11 @@ tidy(hiv_lm_2) %>%
 
 ```
 
+
 The linear regression analysis of demographic disparities in HIV diagnoses revealed significant differences across sex and race/ethnicity. The linear regression model identified males as having significantly higher HIV diagnosis rates than females, with a coefficient of 16.771 for `SEXMale`. The p-value for this variable was lower than 0.05, providing strong statistical evidence that sex is a significant predictor of HIV diagnoses.
 
 Race and ethnicity were also found to be highly significant predictors. The coefficients for `RACE.ETHNICITYBlack` (33.035) and `RACE.ETHNICITYLatino/Hispanic` (6.513) highlight disproportionately high HIV diagnosis rates among Black and Hispanic populations. The near-zero p-values for these predictors confirm that the observed disparities are not due to random variation. These findings align with existing evidence that systemic inequities, including barriers to healthcare access, economic instability, and stigma, disproportionately affect these groups.
+
 
 ```{r}
 # Summarize the multivariate regression model
@@ -151,7 +172,10 @@ tidy(hiv_multivariate_lm) %>%
   knitr::kable(digits = 10, caption = "Multivariate Regression: Adjusting for Confounders")
 ```
 
+
 The multivariate regression model, adjusting for confounders such as year and neighborhood, confirmed the robustness of these disparities. Even after controlling for these factors, the p-values for sex and race/ethnicity remained small, showing that these disparities are deeply rooted in structural and systemic inequities rather than purely geographic or temporal differences.
+
+---------------------------------
 
 ### What is the proportion of concurrent HIV/AIDS diagnoses among total HIV diagnoses, and how does this vary by neighborhood and demographic group?
 
@@ -159,10 +183,12 @@ The multivariate regression model, adjusting for confounders such as year and ne
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-18-1.png)
 
+
 Based on the analysis of the proportion of concurrent HIV/AIDS diagnoses among total HIV diagnoses, significant variation is observed across neighborhoods and demographic groups. In the first visualization, the breakdown by neighborhoods reveals that certain areas, such as Bayside-Little Neck and Sheepshead Bay, exhibit the highest proportions of concurrent diagnoses, while neighborhoods like Greenwich Village - Soho and Downtown-Heights Park Slope have the lowest proportions. This suggests that disparities in early diagnosis and access to healthcare may be geographically distributed.
 
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-19-1.png)
+
 
 This visualization adds a demographic lens, highlighting disparities among race/ethnicity and gender groups within neighborhoods. Across all groups, the proportion of concurrent diagnoses tends to be higher in marginalized communities, particularly among Black and Latino/Hispanic populations. Furthermore, gender differences reveal that females generally experience higher proportions of concurrent diagnoses compared to males, indicating potential gender-specific barriers to timely HIV testing and care.
 
