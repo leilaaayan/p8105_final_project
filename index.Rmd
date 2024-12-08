@@ -17,6 +17,8 @@ HIV (Human Immunodeficiency Virus) is a virus that attacks the body’s immune s
 knitr::include_graphics("images/hiv.jpg")
 ```
 
+UHF (United Hospital Fund) areas are geographic regions used in New York City for public health research and planning. These areas were defined by the United Hospital Fund of New York to align neighborhoods with population-based health care planning and analysis. The dataset of HIV diagnoses are collected based on UHF areas consisting of clusters of adjacent ZIP codes.
+
 Understanding the distribution of HIV among racial groups in different areas of New York City is crucial for addressing health disparities and promoting social equity. Differences in HIV rates across racial and geographic lines often highlight deeper issues, such as socioeconomic inequality, limited access to healthcare, and systemic discrimination. By identifying the most affected communities, this research provides valuable insights for designing targeted prevention and treatment strategies that meet the specific needs of high-risk populations. Ultimately, these efforts aim to reduce health inequities and improve public health outcomes throughout the city.
 
 ---------------------------------
