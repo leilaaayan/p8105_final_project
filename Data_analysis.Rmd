@@ -316,13 +316,13 @@ ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_r
 
 ```{r}
 # Fit a linear regression model for HIV diagnosis rates
-hiv_lm <- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
+hiv_lm_2 <- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
 
 # Summarize the regression model
-hiv_lm_summary <- summary(hiv_lm)
+hiv_lm_summary_2 <- summary(hiv_lm_2)
 
 # Display regression coefficients
-tidy(hiv_lm) %>%
+tidy(hiv_lm_2) %>%
   select(term, estimate, std.error, p.value) %>%
   mutate(p.value = format(p.value, scientific = TRUE)) %>%
   knitr::kable(digits = 3, caption = "Linear Regression: Predicting HIV Diagnoses")

@@ -94,30 +94,60 @@ Asian/Pacific Islanders in the Bronx have the highest rates of concurrent diagno
 
 ---------------------------------
 
+
 ## Data Analysis
 
 ###  How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-5-1.png)
+
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-6-1.png)
+
+Our group first examined whether there were any significant trends in HIV diagnoses in New York from 2016 to 2021. We then filtered out the top 10 neighborhoods with the highest number of HIV diagnoses.
+
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-7-1.png)
 
-![ ](Data_analysis_files/figure-html/unnamed-chunk-8-1.png)
+Following the analysis of HIV, we also examined the trends in AIDS diagnoses. By comparison, the trends for HIV and AIDS diagnoses are similar.
 
-#### Conclusion
+```{r}
+tidy(hiv_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)
+```
+
 
 The analysis of temporal trends in HIV diagnoses demonstrates a significant downward trend in diagnosis rates from 2016 onward. The linear regression model revealed a slope of -1.982, indicating an average annual decrease of approximately 1.98 HIV diagnoses per 100,000 population. The p-value for the `YEAR` variable was lower than 0.05, indicating a statistically significant evidence against the null hypothesis and confirming that the observed trend is not due to random variation. However, neighborhood-level disparities remain a significant concern. Analysis of outlier neighborhoods highlighted that certain areas consistently reported significantly higher HIV diagnosis rates.
-
 
 ### Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
 
 ![ ](Data_analysis_files/figure-html/unnamed-chunk-10-1.png)
-![ ](Data_analysis_files/figure-html/unnamed-chunk-10-2.png)
-#### Conlusion
+This section focuses on demographic disparities. The graph shows a high proportion of HIV diagnoses among Black and Latino/Hispanic individuals."
 
-The analysis of demographic disparities in HIV diagnoses revealed significant differences across sex and race/ethnicity. The linear regression model identified males as having significantly higher HIV diagnosis rates than females, with a coefficient of 16.771 for `SEXMale`. The p-value for this variable was lower than 0.05, providing strong statistical evidence that sex is a significant predictor of HIV diagnoses.
+![ ](Data_analysis_files/figure-html/unnamed-chunk-10-2.png)
+
+
+This section focuses on demographic disparities. The graph shows a high proportion of HIV diagnoses among Black and Latino/Hispanic individuals.
+
+```{r}
+tidy(hiv_lm_2) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%
+  knitr::kable(digits = 3, caption = "Linear Regression: Predicting HIV Diagnoses")
+
+```
+
+The linear regression analysis of demographic disparities in HIV diagnoses revealed significant differences across sex and race/ethnicity. The linear regression model identified males as having significantly higher HIV diagnosis rates than females, with a coefficient of 16.771 for `SEXMale`. The p-value for this variable was lower than 0.05, providing strong statistical evidence that sex is a significant predictor of HIV diagnoses.
 
 Race and ethnicity were also found to be highly significant predictors. The coefficients for `RACE.ETHNICITYBlack` (33.035) and `RACE.ETHNICITYLatino/Hispanic` (6.513) highlight disproportionately high HIV diagnosis rates among Black and Hispanic populations. The near-zero p-values for these predictors confirm that the observed disparities are not due to random variation. These findings align with existing evidence that systemic inequities, including barriers to healthcare access, economic instability, and stigma, disproportionately affect these groups.
+
+```{r}
+# Summarize the multivariate regression model
+tidy(hiv_multivariate_lm) %>%
+  select(term, estimate, std.error, p.value) %>%
+  mutate(p.value = format(p.value, scientific = TRUE)) %>%
+  knitr::kable(digits = 10, caption = "Multivariate Regression: Adjusting for Confounders")
+```
 
 The multivariate regression model, adjusting for confounders such as year and neighborhood, confirmed the robustness of these disparities. Even after controlling for these factors, the p-values for sex and race/ethnicity remained small, showing that these disparities are deeply rooted in structural and systemic inequities rather than purely geographic or temporal differences.
 
