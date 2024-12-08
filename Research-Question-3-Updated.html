@@ -313,8 +313,9 @@ summary_data &lt;- Merged_HIV_UHF_Data %&gt;%
     proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
   ) %&gt;%
   arrange(desc(proportion_concurrent))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;, &#39;sex&#39;. You
-## can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;,
+## &#39;sex&#39;. You can override using the `.groups`
+## argument.</code></pre>
 <pre class="r"><code># Fit the linear regression model
 lm_model &lt;- lm(proportion_concurrent ~ uhf_label + sex + race_ethnicity, data = summary_data)
 
@@ -415,8 +416,8 @@ print(coeff_table)</code></pre>
     legend.text = element_text(size = 10)
   ) +
   scale_color_brewer(palette = &quot;Set1&quot;)</code></pre>
-<pre><code>## Warning: Removed 63 rows containing missing values or values outside
-## the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 63 rows containing missing values or values
+## outside the scale range (`geom_point()`).</code></pre>
 <p><img src="Research-Question-3-Updated_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>[Pattern Discussion]</p>
 <p>By Sex:</p>
@@ -470,7 +471,7 @@ ggplot(neighborhood_summary, aes(x = reorder(neighborhood_u_h_f, -proportion_con
   ) +
   theme_minimal() +
   theme(
-    axis.text.y = element_text(size = 8),
+    axis.text.y = element_text(size = 4, hjust = 1),
     plot.title = element_text(hjust = 0.5, size = 14)
   )</code></pre>
 <p><img src="Research-Question-3-Updated_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>

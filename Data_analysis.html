@@ -772,13 +772,13 @@ ggplot(hiv_by_race, aes(x = reorder(RACE.ETHNICITY, avg_hiv_rate), y = avg_hiv_r
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-11-2.png" width="90%" /></p>
 <pre class="r"><code># Fit a linear regression model for HIV diagnosis rates
-hiv_lm &lt;- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
+hiv_lm_2 &lt;- lm(HIV_Diagnoses ~ SEX + RACE.ETHNICITY, data = hiv_data)
 
 # Summarize the regression model
-hiv_lm_summary &lt;- summary(hiv_lm)
+hiv_lm_summary_2 &lt;- summary(hiv_lm_2)
 
 # Display regression coefficients
-tidy(hiv_lm) %&gt;%
+tidy(hiv_lm_2) %&gt;%
   select(term, estimate, std.error, p.value) %&gt;%
   mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%
   knitr::kable(digits = 3, caption = &quot;Linear Regression: Predicting HIV Diagnoses&quot;)</code></pre>

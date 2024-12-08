@@ -412,7 +412,6 @@ class="uri">https://apnews.com/article/hiv-infections-aids-prevention-shot-02606
 <h2>Initial questions</h2>
 <p>The purposes of this project is to answer the following
 questions:</p>
-<p>*EDA?</p>
 <ol style="list-style-type: decimal">
 <li><p>Temporal Trends: How have HIV and AIDS diagnoses changed over
 time, and do specific neighborhoods experience disproportionately high
@@ -427,7 +426,15 @@ patterns influenced by other factors like race/ethnicity?</p></li>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>Source:</p>
+<p>Our dataset was downloaded from <a
+href="https://data.cityofnewyork.us/Health/HIV-AIDS-Diagnoses-by-Neighborhood-Sex-and-Race-Et/ykvb-493p/about_data">NYC
+Open Data</a>, a platform that provides access to data shared by New
+York City’s government agencies. It provides information on new HIV and
+AIDS diagnoses in New York City, reported to the NYC Department of
+Health and Mental Hygiene (DOHMH) by March 31, 2021. It includes data
+from the calendar years 2016 through 2021, detailing both the number of
+cases and case rates per 100,000 population. The data is stratified by
+United Hospital Fund (UHF) neighborhood, sex, and race/ethnicity.</p>
 <hr />
 </div>
 <div id="exploratory-analysis" class="section level2">
@@ -565,13 +572,46 @@ id="how-have-hiv-and-aids-diagnoses-changed-over-time-and-do-specific-neighborho
 class="section level3">
 <h3>How have HIV and AIDS diagnoses changed over time, and do specific
 neighborhoods experience disproportionately high rates?</h3>
-<p><img src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" />
-<img src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" /> <img
-src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" /></p>
 <p><img
-src="Data_analysis_files/figure-html/unnamed-chunk-8-1.png" /></p>
-<div id="conclusion" class="section level4">
-<h4>Conclusion</h4>
+src="Data_analysis_files/figure-html/unnamed-chunk-5-1.png" /></p>
+<p><img
+src="Data_analysis_files/figure-html/unnamed-chunk-6-1.png" /></p>
+<p>Our group first examined whether there were any significant trends in
+HIV diagnoses in New York from 2016 to 2021. We then filtered out the
+top 10 neighborhoods with the highest number of HIV diagnoses.</p>
+<p><img
+src="Data_analysis_files/figure-html/unnamed-chunk-7-1.png" /></p>
+<p>Following the analysis of HIV, we also examined the trends in AIDS
+diagnoses. By comparison, the trends for HIV and AIDS diagnoses are
+similar.</p>
+<pre class="r"><code>tidy(hiv_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%  # Show exact p-value in scientific notation
+  knitr::kable(digits = 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4025.661917</td>
+<td align="right">1090.0683353</td>
+<td align="left">2.708677e-04</td>
+</tr>
+<tr class="even">
+<td align="left">YEAR</td>
+<td align="right">-1.982152</td>
+<td align="right">0.5400386</td>
+<td align="left">2.947053e-04</td>
+</tr>
+</tbody>
+</table>
 <p>The analysis of temporal trends in HIV diagnoses demonstrates a
 significant downward trend in diagnosis rates from 2016 onward. The
 linear regression model revealed a slope of -1.982, indicating an
@@ -584,22 +624,104 @@ significant concern. Analysis of outlier neighborhoods highlighted that
 certain areas consistently reported significantly higher HIV diagnosis
 rates.</p>
 </div>
-</div>
 <div
 id="are-there-significant-disparities-in-hivaids-diagnoses-across-sex-and-raceethnicity"
 class="section level3">
 <h3>Are there significant disparities in HIV/AIDS diagnoses across sex
 and race/ethnicity?</h3>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-10-1.png" />
-<img src="Data_analysis_files/figure-html/unnamed-chunk-10-2.png" />
-#### Conlusion</p>
-<p>The analysis of demographic disparities in HIV diagnoses revealed
-significant differences across sex and race/ethnicity. The linear
-regression model identified males as having significantly higher HIV
-diagnosis rates than females, with a coefficient of 16.771 for
-<code>SEXMale</code>. The p-value for this variable was lower than 0.05,
-providing strong statistical evidence that sex is a significant
-predictor of HIV diagnoses.</p>
+This section focuses on demographic disparities. The graph shows a high
+proportion of HIV diagnoses among Black and Latino/Hispanic
+individuals.”</p>
+<p><img
+src="Data_analysis_files/figure-html/unnamed-chunk-10-2.png" /></p>
+<p>This section focuses on demographic disparities. The graph shows a
+high proportion of HIV diagnoses among Black and Latino/Hispanic
+individuals.</p>
+<pre class="r"><code>tidy(hiv_lm_2) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%
+  knitr::kable(digits = 3, caption = &quot;Linear Regression: Predicting HIV Diagnoses&quot;)</code></pre>
+<table>
+<caption>Linear Regression: Predicting HIV Diagnoses</caption>
+<colgroup>
+<col width="52%" />
+<col width="13%" />
+<col width="14%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">21.537</td>
+<td align="right">1.129</td>
+<td align="left">7.275877e-79</td>
+</tr>
+<tr class="even">
+<td align="left">SEXFemale</td>
+<td align="right">-15.674</td>
+<td align="right">0.977</td>
+<td align="left">1.064319e-56</td>
+</tr>
+<tr class="odd">
+<td align="left">SEXMale</td>
+<td align="right">16.746</td>
+<td align="right">0.978</td>
+<td align="left">3.474420e-64</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYAsian/Pacific</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Islander</td>
+<td align="right">-12.565</td>
+<td align="right">1.383</td>
+<td align="left">1.364801e-19</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYBlack</td>
+<td align="right">33.035</td>
+<td align="right">1.382</td>
+<td align="left">1.065960e-120</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYLatino/Hispanic</td>
+<td align="right">6.513</td>
+<td align="right">1.382</td>
+<td align="left">2.506124e-06</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYOther/Unknown</td>
+<td align="right">-6.854</td>
+<td align="right">1.384</td>
+<td align="left">7.514098e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYWhite</td>
+<td align="right">-9.611</td>
+<td align="right">1.382</td>
+<td align="left">3.951311e-12</td>
+</tr>
+</tbody>
+</table>
+<p>The linear regression analysis of demographic disparities in HIV
+diagnoses revealed significant differences across sex and
+race/ethnicity. The linear regression model identified males as having
+significantly higher HIV diagnosis rates than females, with a
+coefficient of 16.771 for <code>SEXMale</code>. The p-value for this
+variable was lower than 0.05, providing strong statistical evidence that
+sex is a significant predictor of HIV diagnoses.</p>
 <p>Race and ethnicity were also found to be highly significant
 predictors. The coefficients for <code>RACE.ETHNICITYBlack</code>
 (33.035) and <code>RACE.ETHNICITYLatino/Hispanic</code> (6.513)
@@ -609,6 +731,462 @@ confirm that the observed disparities are not due to random variation.
 These findings align with existing evidence that systemic inequities,
 including barriers to healthcare access, economic instability, and
 stigma, disproportionately affect these groups.</p>
+<pre class="r"><code># Summarize the multivariate regression model
+tidy(hiv_multivariate_lm) %&gt;%
+  select(term, estimate, std.error, p.value) %&gt;%
+  mutate(p.value = format(p.value, scientific = TRUE)) %&gt;%
+  knitr::kable(digits = 10, caption = &quot;Multivariate Regression: Adjusting for Confounders&quot;)</code></pre>
+<table>
+<caption>Multivariate Regression: Adjusting for Confounders</caption>
+<colgroup>
+<col width="58%" />
+<col width="14%" />
+<col width="12%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4432.71461404</td>
+<td align="right">449.3360454</td>
+<td align="left">8.795901e-23</td>
+</tr>
+<tr class="even">
+<td align="left">SEXFemale</td>
+<td align="right">-15.68201860</td>
+<td align="right">0.9077399</td>
+<td align="left">2.675863e-65</td>
+</tr>
+<tr class="odd">
+<td align="left">SEXMale</td>
+<td align="right">16.77128266</td>
+<td align="right">0.9084285</td>
+<td align="left">4.601996e-74</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYAsian/Pacific</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Islander</td>
+<td align="right">-12.53216867</td>
+<td align="right">1.2842262</td>
+<td align="left">2.485694e-22</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYBlack</td>
+<td align="right">33.03541667</td>
+<td align="right">1.2835774</td>
+<td align="left">1.224881e-138</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYLatino/Hispanic</td>
+<td align="right">6.51319444</td>
+<td align="right">1.2835774</td>
+<td align="left">4.007529e-07</td>
+</tr>
+<tr class="even">
+<td align="left">RACE.ETHNICITYOther/Unknown</td>
+<td align="right">-6.80542575</td>
+<td align="right">1.2852104</td>
+<td align="left">1.231332e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">RACE.ETHNICITYWhite</td>
+<td align="right">-9.61061508</td>
+<td align="right">1.2835774</td>
+<td align="left">8.042352e-14</td>
+</tr>
+<tr class="even">
+<td align="left">YEAR</td>
+<td align="right">-2.18592344</td>
+<td align="right">0.2225841</td>
+<td align="left">1.357711e-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Bayside - Little Neck</td>
+<td align="right">-19.20383598</td>
+<td align="right">2.7728440</td>
+<td align="left">4.792543e-12</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Bedford Stuyvesant -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Crown Heights</td>
+<td align="right">16.44298942</td>
+<td align="right">2.7728440</td>
+<td align="left">3.198223e-09</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Bensonhurst - Bay</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Ridge</td>
+<td align="right">-10.85383598</td>
+<td align="right">2.7728440</td>
+<td align="left">9.165992e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Borough Park</td>
+<td align="right">-11.53240741</td>
+<td align="right">2.7728440</td>
+<td align="left">3.240344e-05</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Canarsie - Flatlands</td>
+<td align="right">-7.90859788</td>
+<td align="right">2.7728440</td>
+<td align="left">4.357176e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Central Harlem -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Morningside Heights</td>
+<td align="right">13.92870370</td>
+<td align="right">2.7728440</td>
+<td align="left">5.227528e-07</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Chelsea - Clinton</td>
+<td align="right">37.79933862</td>
+<td align="right">2.7728440</td>
+<td align="left">1.077335e-41</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Coney Island -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Sheepshead Bay</td>
+<td align="right">-8.42843915</td>
+<td align="right">2.7728440</td>
+<td align="left">2.378862e-03</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Crotona - Tremont</td>
+<td align="right">20.02632275</td>
+<td align="right">2.7728440</td>
+<td align="left">5.746986e-13</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Downtown - Heights -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Park Slope</td>
+<td align="right">-5.12208995</td>
+<td align="right">2.7728440</td>
+<td align="left">6.476261e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.East Flatbush -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Flatbush</td>
+<td align="right">7.24298942</td>
+<td align="right">2.7728440</td>
+<td align="left">9.020841e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.East Harlem</td>
+<td align="right">13.86283069</td>
+<td align="right">2.7728440</td>
+<td align="left">5.911480e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.East New York</td>
+<td align="right">13.60568783</td>
+<td align="right">2.7728440</td>
+<td align="left">9.504068e-07</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Flushing - Clearview</td>
+<td align="right">-6.32843915</td>
+<td align="right">2.7728440</td>
+<td align="left">2.250702e-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Fordham - Bronx</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Park</td>
+<td align="right">5.12235450</td>
+<td align="right">2.7728440</td>
+<td align="left">6.474879e-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Fresh Meadows</td>
+<td align="right">-12.24431217</td>
+<td align="right">2.7728440</td>
+<td align="left">1.024087e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Gramercy Park -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Murray Hill</td>
+<td align="right">2.72949735</td>
+<td align="right">2.7728440</td>
+<td align="left">3.249746e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Greenpoint</td>
+<td align="right">-3.84748677</td>
+<td align="right">2.7728440</td>
+<td align="left">1.653228e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Greenwich Village -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Soho</td>
+<td align="right">26.99457672</td>
+<td align="right">2.7728440</td>
+<td align="left">3.112492e-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.High Bridge -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Morrisania</td>
+<td align="right">15.97314815</td>
+<td align="right">2.7728440</td>
+<td align="left">8.800065e-09</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Hunts Point - Mott</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Haven</td>
+<td align="right">22.19158295</td>
+<td align="right">2.8216877</td>
+<td align="left">4.359583e-15</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Jamaica</td>
+<td align="right">-4.85621693</td>
+<td align="right">2.7728440</td>
+<td align="left">7.993703e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Kingsbridge -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Riverdale</td>
+<td align="right">-10.76335979</td>
+<td align="right">2.7728440</td>
+<td align="left">1.048418e-04</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Long Island City -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Astoria</td>
+<td align="right">6.80886243</td>
+<td align="right">2.7728440</td>
+<td align="left">1.409505e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Lower Manhattan</td>
+<td align="right">4.43902116</td>
+<td align="right">2.7728440</td>
+<td align="left">1.094538e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Northeast Bronx</td>
+<td align="right">-6.00304233</td>
+<td align="right">2.7728440</td>
+<td align="left">3.043161e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Pelham - Throgs</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Neck</td>
+<td align="right">0.05886243</td>
+<td align="right">2.7728440</td>
+<td align="left">9.830643e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Port Richmond</td>
+<td align="right">-3.28889912</td>
+<td align="right">2.7919938</td>
+<td align="left">2.388533e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Ridgewood - Forest</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Hills</td>
+<td align="right">3.78822751</td>
+<td align="right">2.7728440</td>
+<td align="left">1.719311e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Rockaway</td>
+<td align="right">-8.49748677</td>
+<td align="right">2.7728440</td>
+<td align="left">2.189761e-03</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.South Beach -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Tottenville</td>
+<td align="right">-3.34589947</td>
+<td align="right">2.7728440</td>
+<td align="left">2.276081e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Southeast Queens</td>
+<td align="right">-10.25383598</td>
+<td align="right">2.7728440</td>
+<td align="left">2.192931e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Southwest Queens</td>
+<td align="right">-6.01574074</td>
+<td align="right">2.7728440</td>
+<td align="left">3.008242e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Stapleton - St.</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">George</td>
+<td align="right">-6.96177249</td>
+<td align="right">2.7728440</td>
+<td align="left">1.207542e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Sunset Park</td>
+<td align="right">2.23743386</td>
+<td align="right">2.7728440</td>
+<td align="left">4.197507e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Union Square -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Lower East Side</td>
+<td align="right">2.01759259</td>
+<td align="right">2.7728440</td>
+<td align="left">4.668712e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Upper East Side</td>
+<td align="right">-4.82526455</td>
+<td align="right">2.7728440</td>
+<td align="left">8.187771e-02</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Upper West Side</td>
+<td align="right">-1.96256614</td>
+<td align="right">2.7728440</td>
+<td align="left">4.791088e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.Washington Heights -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Inwood</td>
+<td align="right">12.10171958</td>
+<td align="right">2.7728440</td>
+<td align="left">1.296321e-05</td>
+</tr>
+<tr class="odd">
+<td align="left">Neighborhood..U.H.F.West Queens</td>
+<td align="right">-3.03796296</td>
+<td align="right">2.7728440</td>
+<td align="left">2.732924e-01</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Williamsburg -</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Bushwick</td>
+<td align="right">10.82473545</td>
+<td align="right">2.7728440</td>
+<td align="left">9.571857e-05</td>
+</tr>
+<tr class="even">
+<td align="left">Neighborhood..U.H.F.Willowbrook</td>
+<td align="right">-7.48161376</td>
+<td align="right">2.7728440</td>
+<td align="left">6.991656e-03</td>
+</tr>
+</tbody>
+</table>
 <p>The multivariate regression model, adjusting for confounders such as
 year and neighborhood, confirmed the robustness of these disparities.
 Even after controlling for these factors, the p-values for sex and
@@ -624,7 +1202,31 @@ HIV diagnoses, and how does this vary by neighborhood and demographic
 group?</h3>
 <p><img src="Data_analysis_files/figure-html/unnamed-chunk-18-1.png" />
 <img src="Data_analysis_files/figure-html/unnamed-chunk-19-1.png" />
-———————————</p>
+Conclusion:</p>
+<p>Based on the analysis of the proportion of concurrent HIV/AIDS
+diagnoses among total HIV diagnoses, significant variation is observed
+across neighborhoods and demographic groups. In the first visualization,
+the breakdown by neighborhoods reveals that certain areas, such as
+Bayside-Little Neck and Sheepshead Bay, exhibit the highest proportions
+of concurrent diagnoses, while neighborhoods like Greenwich Village -
+Soho and Downtown-Heights Park Slope have the lowest proportions. This
+suggests that disparities in early diagnosis and access to healthcare
+may be geographically distributed.</p>
+<p>The second visualization adds a demographic lens, highlighting
+disparities among race/ethnicity and gender groups within neighborhoods.
+Across all groups, the proportion of concurrent diagnoses tends to be
+higher in marginalized communities, particularly among Black and
+Latino/Hispanic populations. Furthermore, gender differences reveal that
+females generally experience higher proportions of concurrent diagnoses
+compared to males, indicating potential gender-specific barriers to
+timely HIV testing and care.</p>
+<p>These findings underscore the critical need for targeted public
+health interventions aimed at improving early HIV detection and reducing
+disparities across neighborhoods and demographic groups. Addressing
+structural barriers, increasing awareness, and enhancing access to care
+in underserved areas are essential steps to ensure equitable health
+outcomes for all populations.</p>
+<hr />
 </div>
 </div>
 <div id="discussion" class="section level2">
