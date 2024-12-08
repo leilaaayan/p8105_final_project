@@ -27,8 +27,6 @@ Link "https://apnews.com/article/hiv-infections-aids-prevention-shot-02606f7d789
 
 The purposes of this project is to answer the following questions: 
 
-*EDA?
-
 1. Temporal Trends: How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
 
 2. Demographic Disparities: Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
@@ -39,12 +37,7 @@ The purposes of this project is to answer the following questions:
 
 ## Data 
 
-Source:
-
-
-
-
-
+Our dataset was downloaded from [NYC Open Data](https://data.cityofnewyork.us/Health/HIV-AIDS-Diagnoses-by-Neighborhood-Sex-and-Race-Et/ykvb-493p/about_data), a platform that provides access to data shared by New York City's government agencies. It provides information on new HIV and AIDS diagnoses in New York City, reported to the NYC Department of Health and Mental Hygiene (DOHMH) by March 31, 2021. It includes data from the calendar years 2016 through 2021, detailing both the number of cases and case rates per 100,000 population. The data is stratified by United Hospital Fund (UHF) neighborhood, sex, and race/ethnicity.
 
 ---------------------------------
 
