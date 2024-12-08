@@ -264,7 +264,7 @@ $(document).ready(function () {
   <a href="about.html">About The Team</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
+  <a href="mailto:&lt;ts3670@cumc.columbia.edu&gt;, &lt;sl5685@cumc.columbia.edu&gt;, &lt;sz3318@cumc.columbia.edu&gt;, &lt;am6594@cumc.columbia.edu&gt;, &lt;ly2633@cumc.columbia.edu&gt;">
     <span class="fa fa-envelope fa-lg"></span>
      
   </a>
@@ -313,8 +313,8 @@ summary_data &lt;- Merged_HIV_UHF_Data %&gt;%
     proportion_concurrent = total_concurrent_hiv_aids / total_hiv_diagnoses
   ) %&gt;%
   arrange(desc(proportion_concurrent))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;,
-## &#39;sex&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;uhf_label&#39;, &#39;sex&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code># Fit the linear regression model
 lm_model &lt;- lm(proportion_concurrent ~ uhf_label + sex + race_ethnicity, data = summary_data)
 
@@ -405,8 +405,8 @@ print(coeff_table)</code></pre>
     legend.text = element_text(size = 10)
   ) +
   scale_color_brewer(palette = &quot;Set1&quot;)</code></pre>
-<pre><code>## Warning: Removed 63 rows containing missing values or values
-## outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 63 rows containing missing values or values outside
+## the scale range (`geom_point()`).</code></pre>
 <p><img src="Research-question-3_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code># neighborhood
 neighborhood_summary &lt;- Merged_HIV_UHF_Data %&gt;%

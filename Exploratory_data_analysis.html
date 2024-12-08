@@ -340,7 +340,7 @@ div.tocify {
   <a href="about.html">About The Team</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
+  <a href="mailto:&lt;ts3670@cumc.columbia.edu&gt;, &lt;sl5685@cumc.columbia.edu&gt;, &lt;sz3318@cumc.columbia.edu&gt;, &lt;am6594@cumc.columbia.edu&gt;, &lt;ly2633@cumc.columbia.edu&gt;">
     <span class="fa fa-envelope fa-lg"></span>
      
   </a>
@@ -703,8 +703,8 @@ strategies.</li>
 avg_aids = HIV_UHF_df |&gt;
   group_by(borough, year) |&gt;
   summarise(Avg_AIDS_Rate = mean(aids_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You
-## can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can
+## override using the `.groups` argument.</code></pre>
 <pre class="r"><code>avg_aids</code></pre>
 <pre><code>## # A tibble: 30 × 3
 ## # Groups:   borough [5]
@@ -753,9 +753,8 @@ the Bronx and Manhattan.</li>
 avghiv_sex_ethinicity = HIV_UHF_df |&gt;
   group_by(borough, year,sex,race_ethnicity) |&gt;
   summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;,
-## &#39;year&#39;, &#39;sex&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;,
+## &#39;sex&#39;. You can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>avghiv_sex_ethinicity</code></pre>
 <pre><code>## # A tibble: 540 × 5
 ## # Groups:   borough, year, sex [90]
@@ -808,9 +807,8 @@ proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
   group_by(borough, year,neighborhood_u_h_f) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;,
-## &#39;year&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_neighborhood</code></pre>
 <pre><code>## # A tibble: 210 × 4
 ## # Groups:   borough, year [30]
@@ -836,8 +834,8 @@ proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values
-## outside the scale range (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside
+## the scale range (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
 <ul>
 <li>Within the same borough, concurrent HIV/AIDS diagnosis rates vary
@@ -862,9 +860,8 @@ proprotion_diagnoses_sex = HIV_UHF_df |&gt;
   group_by(borough, year,sex) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;,
-## &#39;year&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_sex</code></pre>
 <pre><code>## # A tibble: 90 × 4
 ## # Groups:   borough, year [30]
@@ -913,9 +910,8 @@ proprotion_diagnoses_race = HIV_UHF_df |&gt;
   group_by(borough, year,race_ethnicity) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;,
-## &#39;year&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_race</code></pre>
 <pre><code>## # A tibble: 180 × 4
 ## # Groups:   borough, year [30]
@@ -943,8 +939,8 @@ ggplot(proprotion_diagnoses_race, aes(x = race_ethnicity, y = as.numeric(Avg_pro
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<pre><code>## Warning: Removed 15 rows containing missing values or values
-## outside the scale range (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 15 rows containing missing values or values outside
+## the scale range (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
 <ul>
 <li>Asian/Pacific Islanders in the Bronx have the highest rates of
