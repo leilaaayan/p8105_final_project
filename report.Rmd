@@ -103,17 +103,38 @@ Asian/Pacific Islanders in the Bronx have the highest rates of concurrent diagno
 
 ## Data Analysis
 
-1. Temporal Trends
+###  How have HIV and AIDS diagnoses changed over time, and do specific neighborhoods experience disproportionately high rates?
+
+![ ](Data_analysis_files/figure-html/unnamed-chunk-5-1.png)
+![ ](Data_analysis_files/figure-html/unnamed-chunk-6-1.png)
+![ ](Data_analysis_files/figure-html/unnamed-chunk-7-1.png)
+
+![ ](Data_analysis_files/figure-html/unnamed-chunk-8-1.png)
+
+#### Conclusion
+
+The analysis of temporal trends in HIV diagnoses demonstrates a significant downward trend in diagnosis rates from 2016 onward. The linear regression model revealed a slope of -1.982, indicating an average annual decrease of approximately 1.98 HIV diagnoses per 100,000 population. The p-value for the `YEAR` variable was lower than 0.05, indicating a statistically significant evidence against the null hypothesis and confirming that the observed trend is not due to random variation. However, neighborhood-level disparities remain a significant concern. Analysis of outlier neighborhoods highlighted that certain areas consistently reported significantly higher HIV diagnosis rates.
 
 
-2. Demographic Disparities
+### Are there significant disparities in HIV/AIDS diagnoses across sex and race/ethnicity?
 
+![ ](Data_analysis_files/figure-html/unnamed-chunk-10-1.png)
+![ ](Data_analysis_files/figure-html/unnamed-chunk-10-2.png)
+#### Conlusion
 
-3. Concurrent Diagnoses
+The analysis of demographic disparities in HIV diagnoses revealed significant differences across sex and race/ethnicity. The linear regression model identified males as having significantly higher HIV diagnosis rates than females, with a coefficient of 16.771 for `SEXMale`. The p-value for this variable was lower than 0.05, providing strong statistical evidence that sex is a significant predictor of HIV diagnoses.
 
+Race and ethnicity were also found to be highly significant predictors. The coefficients for `RACE.ETHNICITYBlack` (33.035) and `RACE.ETHNICITYLatino/Hispanic` (6.513) highlight disproportionately high HIV diagnosis rates among Black and Hispanic populations. The near-zero p-values for these predictors confirm that the observed disparities are not due to random variation. These findings align with existing evidence that systemic inequities, including barriers to healthcare access, economic instability, and stigma, disproportionately affect these groups.
 
+The multivariate regression model, adjusting for confounders such as year and neighborhood, confirmed the robustness of these disparities. Even after controlling for these factors, the p-values for sex and race/ethnicity remained small, showing that these disparities are deeply rooted in structural and systemic inequities rather than purely geographic or temporal differences.
+
+### What is the proportion of concurrent HIV/AIDS diagnoses among total HIV diagnoses, and how does this vary by neighborhood and demographic group?
+
+![ ](Data_analysis_files/figure-html/unnamed-chunk-18-1.png)
+![ ](Data_analysis_files/figure-html/unnamed-chunk-19-1.png)
 ---------------------------------
 
 ## Discussion
+The neighborhoods are ranked by their proportions, with Greenwich Village-Downtown having the lowest proportion and Sheepshead Bay the highest. The visualization highlights geographic variability in concurrent diagnoses, suggesting that certain neighborhoods may face distinct challenges in early detection or healthcare access.
 
 What were your findings? Are they what you expect? What insights into the data can you make?
