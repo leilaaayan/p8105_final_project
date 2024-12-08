@@ -6,6 +6,7 @@ output:
     toc_float: true
 ---
 
+---------------------------------------
 
 ```{css, echo = FALSE}
 img.portrait{
@@ -22,7 +23,7 @@ img.portrait{
     <td></td>
   </tr>
   <tr>
-    <td><a href=" ">Tong Su</a > is a first year M.S. biostatistics student who just finds data science’s fun this semester. She loves books, cats, snowboarding and golfing.</td>
+    <td><a href="https://tsunumber1.github.io/">Tong Su</a > is a first year M.S. biostatistics student who just finds data science’s fun this semester. She loves books, cats, snowboarding and golfing.</td>
     <td>
       <img src="./images/SuTong.jpg" style="width:150px; height:auto;" alt="Portrait of Tong Su">
     </td>
