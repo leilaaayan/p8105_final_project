@@ -11,7 +11,6 @@
 
 <meta name="author" content="Tong Su, Shike Zhang" />
 
-<meta name="date" content="2024-12-05" />
 
 <title>Exploratory Data Analysis</title>
 
@@ -362,13 +361,14 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exploratory Data Analysis</h1>
 <h4 class="author">Tong Su, Shike Zhang</h4>
-<h4 class="date">2024-12-05</h4>
 
 </div>
 
 
-<div id="data-import-and-cleaning" class="section level2">
-<h2>Data Import and Cleaning</h2>
+<hr />
+<div id="data-import-and-cleaning" class="section level1">
+<h1>Data Import and Cleaning</h1>
+<hr />
 <pre class="r"><code># Import the HIV and UHF datasets
 HIV_df =
   read.csv(&quot;./data/HIV_AIDS_Diagnoses_by_Neighborhood__Sex__and_Race_Ethnicity_20241118.csv&quot;)|&gt;
@@ -402,8 +402,10 @@ HIV_cleaned_df = HIV_df |&gt;
 # Merge datasets
 HIV_UHF_df = HIV_cleaned_df |&gt;
   inner_join(UHF_df, by = c(&quot;borough&quot;, &quot;neighborhood_u_h_f&quot; = &quot;uhf_neighborhood&quot;))</code></pre>
-<div id="data-dictionary" class="section level3">
-<h3>Data Dictionary</h3>
+<hr />
+<div id="data-dictionary" class="section level2">
+<h2>Data Dictionary</h2>
+<hr />
 <ul>
 <li><p>YEAR: Year of diagnosis.</p></li>
 <li><p>Borough: Borough information (some missing values).</p></li>
@@ -422,9 +424,11 @@ diagnoses.</p></li>
 <li><p>AIDS DIAGNOSES PER 100,000 POPULATION: Rate of AIDS diagnoses
 normalized by population.</p></li>
 </ul>
+<hr />
 </div>
-<div id="data-summary" class="section level3">
-<h3>Data Summary</h3>
+<div id="data-summary" class="section level2">
+<h2>Data Summary</h2>
+<hr />
 <table>
 <caption>Data summary</caption>
 <tbody>
@@ -640,12 +644,15 @@ align="left">proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 </div>
 <div id="eda" class="section level1">
 <h1>EDA</h1>
+<hr />
 <div id="temporal-trends" class="section level2">
 <h2>Temporal trends</h2>
+<hr />
 <div id="temporal-trends-of-hiv-diagnoses" class="section level3">
 <h3>Temporal trends of HIV diagnoses</h3>
 <pre class="r"><code># Group by Borough and Year and calculate average HIV diagnosis rates
@@ -696,6 +703,7 @@ stabilizing trends, the Bronx’s increasing rates underscore significant
 disparities and the urgent need for targeted, borough-specific
 strategies.</li>
 </ul>
+<hr />
 </div>
 <div id="temporal-trends-of-aid-diagnoses" class="section level3">
 <h3>Temporal trends of AID diagnoses</h3>
@@ -703,8 +711,8 @@ strategies.</li>
 avg_aids = HIV_UHF_df |&gt;
   group_by(borough, year) |&gt;
   summarise(Avg_AIDS_Rate = mean(aids_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can override
-## using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;. You can
+## override using the `.groups` argument.</code></pre>
 <pre class="r"><code>avg_aids</code></pre>
 <pre><code>## # A tibble: 30 × 3
 ## # Groups:   borough [5]
@@ -743,18 +751,20 @@ low, similar to Queens, with only a slight increase from 2020 to 2021,
 warranting further investigation despite remaining well below rates in
 the Bronx and Manhattan.</li>
 </ul>
+<hr />
 </div>
 </div>
 <div id="demographic-disparities" class="section level2">
 <h2>Demographic Disparities</h2>
+<hr />
 <div id="hiv-diagnoses-by-sex-and-raceethnicity" class="section level3">
 <h3>HIV Diagnoses by Sex and Race/Ethnicity</h3>
 <pre class="r"><code># Group by Sex and Ethnicity with average rate of HIV
 avghiv_sex_ethinicity = HIV_UHF_df |&gt;
   group_by(borough, year,sex,race_ethnicity) |&gt;
   summarise(Avg_HIV_Rate = mean(hiv_diagnoses_per_100_000_population, na.rm = TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;, &#39;sex&#39;. You
-## can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;,
+## &#39;sex&#39;. You can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>avghiv_sex_ethinicity</code></pre>
 <pre><code>## # A tibble: 540 × 5
 ## # Groups:   borough, year, sex [90]
@@ -795,10 +805,12 @@ underscore systemic inequities in access to prevention, testing, and
 treatment, with Black and Latino/Hispanic populations requiring
 prioritized healthcare services and interventions.</li>
 </ul>
+<hr />
 </div>
 </div>
 <div id="concurrent-diagnoses" class="section level2">
 <h2>Concurrent Diagnoses</h2>
+<hr />
 <div id="proportion-of-concurrent-diagnoses-by-neighborhood"
 class="section level3">
 <h3>Proportion of concurrent diagnoses by neighborhood</h3>
@@ -807,8 +819,8 @@ proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
   group_by(borough, year,neighborhood_u_h_f) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can
-## override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_neighborhood</code></pre>
 <pre><code>## # A tibble: 210 × 4
 ## # Groups:   borough, year [30]
@@ -834,8 +846,8 @@ proprotion_diagnoses_neighborhood = HIV_UHF_df |&gt;
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values outside the
-## scale range (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside
+## the scale range (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
 <ul>
 <li>Within the same borough, concurrent HIV/AIDS diagnosis rates vary
@@ -851,6 +863,7 @@ reflects late HIV detection, often when patients have progressed to
 AIDS, highlighting an urgent need for earlier testing and intervention
 efforts.</li>
 </ul>
+<hr />
 </div>
 <div id="proportion-of-concurrent-diagnoses-by-sex"
 class="section level3">
@@ -860,8 +873,8 @@ proprotion_diagnoses_sex = HIV_UHF_df |&gt;
   group_by(borough, year,sex) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can
-## override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_sex</code></pre>
 <pre><code>## # A tibble: 90 × 4
 ## # Groups:   borough, year [30]
@@ -901,6 +914,7 @@ and treatment efforts. Most boroughs exhibit higher rates among males,
 aligning with data on delayed diagnoses among men, especially men who
 have sex with men (MSM).</li>
 </ul>
+<hr />
 </div>
 <div id="proportion-of-concurrent-diagnoses-by-raceethnicity"
 class="section level3">
@@ -910,8 +924,8 @@ proprotion_diagnoses_race = HIV_UHF_df |&gt;
   group_by(borough, year,race_ethnicity) |&gt;
   summarise(Avg_proportion_Rate = mean(proportion_of_concurrent_hiv_aids_diagnoses_among_all_hiv_diagnoses, na.rm = TRUE)
             )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You can
-## override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;borough&#39;, &#39;year&#39;. You
+## can override using the `.groups` argument.</code></pre>
 <pre class="r"><code>proprotion_diagnoses_race</code></pre>
 <pre><code>## # A tibble: 180 × 4
 ## # Groups:   borough, year [30]
@@ -939,8 +953,8 @@ ggplot(proprotion_diagnoses_race, aes(x = race_ethnicity, y = as.numeric(Avg_pro
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<pre><code>## Warning: Removed 15 rows containing missing values or values outside the
-## scale range (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 15 rows containing missing values or values outside
+## the scale range (`geom_bar()`).</code></pre>
 <p><img src="Exploratory_data_analysis_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
 <ul>
 <li>Asian/Pacific Islanders in the Bronx have the highest rates of
