@@ -6,14 +6,66 @@ output:
     toc_float: true
 ---
 
----------------------------------
+---------------------------------------
 
-## Leila Yan
+```{css, echo = FALSE}
+img.portrait{
+  width:60%;
+  float:bottom;
+  float:right;
+}
+```
 
-## Tong Su
+```{=html}
+<table style="width:90%">
+  <tr>
+    <td><h3>Tong Su</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://tsunumber1.github.io/">Tong Su</a > is a first year M.S. biostatistics student who just finds data science’s fun this semester. She loves books, cats, snowboarding and golfing.</td>
+    <td>
+      <img src="./images/SuTong.jpg" style="width:150px; height:auto;" alt="Portrait of Tong Su">
+    </td>
 
-## Shike Zhang
 
-## Shumei Liu
+</tr>
+  <tr>
+    <td><h3>Shike Zhang</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://shikez3318.github.io/">Shike Zhang</a > is a first-year M.S. biostatistics student who interested in how to combine biomedical and data science. She's a keen film watcher and has a kitten called eevee. </td>
+    <td><img src="./images/Shike.jpg" style="width:150px; height:auto;" alt="Portrait of Shike Zhang"></td>
+  </tr>
+  
+  
+</tr>
+  <tr>
+    <td><h3>Shumei Liu</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://shumeill.github.io/">Shumei Liu</a > is a first-year M.S. biostatistics student who finds it fun to process data and draw interactive plots. She is a video game enthusiast and enjoys outdoor activities.</td>
+    <td><img src="./images/Shumei.jpg" style="width:150px; height:auto;" alt="Portrait of Shumei Liu"></td>
+  </tr>
 
-## Alice Mao
+  <tr>
+    <td><h3>Alice Mao</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://am6594.github.io/">Alice Mao</a > is a first-year M.S. Biostatistics student who finds biostatistics more interesting than finance this semester. She loves hiking and gaming.</td>
+    <td><img src="./images/Alice.jpg" style="width:150px; height:auto;" alt="Portrait of Alice Mao"></td>
+  </tr>
+  
+  
+<tr>
+    <td><h3>Leila Yan</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://leilaayan.github.io/">Leila Yan</a > is a second-year epidemiology student who is interested in analyzing clinical data. She enjoys watching movies, traveling, and playing the piano in her free time.</td>
+    <td><img src="./images/Leila.jpg" style="width:150px; height:auto;" alt="Portrait of Leila Yan"></td>
+  </tr>
+```

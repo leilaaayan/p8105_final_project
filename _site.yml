@@ -15,7 +15,11 @@ navbar:
     - text: "About The Team"
       href: about.html
     - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
+      href: mailto:<ts3670@cumc.columbia.edu>, 
+                  <sl5685@cumc.columbia.edu>, 
+                  <sz3318@cumc.columbia.edu>,
+                  <am6594@cumc.columbia.edu>,
+                  <ly2633@cumc.columbia.edu>
     - icon: fa-github fa-lg
       href: http://github.com/leilaaayan/
 
