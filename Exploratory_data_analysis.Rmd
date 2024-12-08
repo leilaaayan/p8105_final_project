@@ -167,7 +167,7 @@ ggplot(avg_hiv, aes(x = year, y = Avg_HIV_Rate, color = borough)) +
 ---------------------------------
 
 ### Temporal trends of AID diagnoses
-```{r}
+```{r, message=FALSE}
 # Group by Borough and Year and calculate average AIDS diagnosis rates
 avg_aids = HIV_UHF_df |>
   group_by(borough, year) |>
@@ -202,7 +202,7 @@ ggplot(avg_aids, aes(x = year, y = Avg_AIDS_Rate, color = borough, group = borou
 ---------------------------------
 
 ### HIV Diagnoses by Sex and Race/Ethnicity
-```{r}
+```{r, message=FALSE}
 # Group by Sex and Ethnicity with average rate of HIV
 avghiv_sex_ethinicity = HIV_UHF_df |>
   group_by(borough, year,sex,race_ethnicity) |>
@@ -235,7 +235,7 @@ ggplot(avghiv_sex_ethinicity, aes(x = sex, y = Avg_HIV_Rate, fill = race_ethnici
 
 ### Proportion of concurrent diagnoses by neighborhood
 
-```{r}
+```{r, message=FALSE}
 # Group by proportion of concurrent diagnoses by neighborhood
 proprotion_diagnoses_neighborhood = HIV_UHF_df |>
   group_by(borough, year,neighborhood_u_h_f) |>
@@ -245,7 +245,7 @@ proprotion_diagnoses_neighborhood = HIV_UHF_df |>
 proprotion_diagnoses_neighborhood
 ```
 
-```{r}
+```{r, warning=FALSE}
 ggplot(proprotion_diagnoses_neighborhood, aes(x = neighborhood_u_h_f, y = Avg_proportion_Rate,fill=borough)) +
   geom_bar(stat = "identity") +
   labs(
@@ -263,7 +263,7 @@ ggplot(proprotion_diagnoses_neighborhood, aes(x = neighborhood_u_h_f, y = Avg_pr
 
 ### Proportion of Concurrent Diagnoses by  Sex
 
-```{r}
+```{r, message=FALSE}
 # Group by proportion of concurrent diagnoses by borough and sex with average rate of HIV
 proprotion_diagnoses_sex = HIV_UHF_df |>
   group_by(borough, year,sex) |>
@@ -293,7 +293,7 @@ ggplot(proprotion_diagnoses_sex, aes(x = borough, y = as.numeric(Avg_proportion_
 
 ### Proportion of Concurrent Diagnoses by Race/Ethnicity
 
-```{r}
+```{r, message=FALSE}
 # Group by proportion of concurrent diagnoses by borough and ethnicity with average rate of HIV
 proprotion_diagnoses_race = HIV_UHF_df |>
   group_by(borough, year,race_ethnicity) |>
@@ -304,7 +304,7 @@ proprotion_diagnoses_race
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 # Concurrent diagnoses by race/ethnicity and borough
 ggplot(proprotion_diagnoses_race, aes(x = race_ethnicity, y = as.numeric(Avg_proportion_Rate), fill = borough)) +
   geom_bar(stat = "identity", position = "dodge") +
